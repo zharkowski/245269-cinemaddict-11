@@ -280,7 +280,7 @@ const render = (container, markup) => {
   container.insertAdjacentHTML(`beforeend`, markup);
 };
 
-const bodyElement = document.querySelector(`body`)
+const bodyElement = document.querySelector(`body`);
 const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
 const headerFooter = document.querySelector(`.footer`);
@@ -294,13 +294,17 @@ const boardsContainer = mainElement.querySelector(`.films`);
 
 render(boardsContainer, getFilmsBoard());
 
-const filmList = document.querySelector(`.films-list__container`);
+const filmsList = boardsContainer.querySelector(`.films-list`);
+const filmsListContainer = filmsList.querySelector(`.films-list__container`);
 
-render(filmList, getFilmCard());
-render(filmList, getFilmCard());
-render(filmList, getFilmCard());
-render(filmList, getFilmCard());
-render(filmList, getFilmCard());
+render(filmsListContainer, getFilmCard());
+render(filmsListContainer, getFilmCard());
+render(filmsListContainer, getFilmCard());
+render(filmsListContainer, getFilmCard());
+render(filmsListContainer, getFilmCard());
+
+render(filmsList, getShowMoreButton());
+
 render(boardsContainer, getTopRatedBoard());
 render(boardsContainer, getMostCommented());
 
@@ -315,4 +319,4 @@ render(mostCommentedContainer, getFilmCard());
 const footerStatistic = headerFooter.querySelector(`.footer__statistics`);
 render(footerStatistic, getFilmsAmountElement());
 
-render(bodyElement, getFilmDetailsPopup());
+// render(bodyElement, getFilmDetailsPopup());
