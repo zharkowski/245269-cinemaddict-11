@@ -319,4 +319,4 @@ render(mostCommentedContainer, getFilmCard());
 const footerStatistic = headerFooter.querySelector(`.footer__statistics`);
 render(footerStatistic, getFilmsAmountElement());
 
-// render(bodyElement, getFilmDetailsPopup());
+render(bodyElement, getFilmDetailsPopup());
