@@ -8,4 +8,4 @@ const getTopRatedBoard = () => {
   );
 };
 
-export {getTopRatedBoard};
+export default getTopRatedBoard;

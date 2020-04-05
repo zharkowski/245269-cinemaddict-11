@@ -7,4 +7,4 @@ const getFilmsBoard = () => {
   );
 };
 
-export {getFilmsBoard};
+export default getFilmsBoard;

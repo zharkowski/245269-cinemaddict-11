@@ -7,4 +7,4 @@ const getProfileElement = () => {
   );
 };
 
-export {getProfileElement};
+export default getProfileElement;

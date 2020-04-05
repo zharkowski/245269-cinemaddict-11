@@ -8,4 +8,4 @@ const getSortingElement = () => {
   );
 };
 
-export {getSortingElement};
+export default getSortingElement;

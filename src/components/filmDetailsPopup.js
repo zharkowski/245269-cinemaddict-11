@@ -172,4 +172,4 @@ const getFilmDetailsPopup = () => {
   );
 };
 
-export {getFilmDetailsPopup};
+export default getFilmDetailsPopup;

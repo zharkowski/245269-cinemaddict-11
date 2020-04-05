@@ -4,4 +4,4 @@ const getShowMoreButton = () => {
   );
 };
 
-export {getShowMoreButton};
+export default getShowMoreButton;

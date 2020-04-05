@@ -4,4 +4,4 @@ const getBoardsContainer = () => {
   );
 };
 
-export {getBoardsContainer};
+export default getBoardsContainer;

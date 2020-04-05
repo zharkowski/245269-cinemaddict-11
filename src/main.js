@@ -1,14 +1,14 @@
-import {getProfileElement} from "./components/profile.js";
-import {getNavigationElement} from "./components/navigation.js";
-import {getSortingElement} from "./components/sorting.js";
-import {getBoardsContainer} from "./components/boardsContainer.js";
-import {getFilmsBoard} from "./components/filmsBoard.js";
-import {getFilmCard} from "./components/filmCard.js";
-import {getShowMoreButton} from "./components/showMoreButton.js";
-import {getTopRatedBoard} from "./components/topRatedBoard.js";
-import {getMostCommented} from "./components/mostCommented.js";
-import {getFilmsAmountElement} from "./components/filmsAmountElement.js";
-import {getFilmDetailsPopup} from "./components/filmDetailsPopup.js";
+import getProfileElement from "./components/profile.js";
+import getNavigationElement from "./components/navigation.js";
+import getSortingElement from "./components/sorting.js";
+import getBoardsContainer from "./components/boardsContainer.js";
+import getFilmsBoard from "./components/filmsBoard.js";
+import getFilmCard from "./components/filmCard.js";
+import getShowMoreButton from "./components/showMoreButton.js";
+import getTopRatedBoard from "./components/topRatedBoard.js";
+import getMostCommented from "./components/mostCommented.js";
+import getFilmsAmountElement from "./components/filmsAmountElement.js";
+import getFilmDetailsPopup from "./components/filmDetailsPopup.js";
 
 const render = (container, markup) => {
   container.insertAdjacentHTML(`beforeend`, markup);

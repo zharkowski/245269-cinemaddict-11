@@ -4,4 +4,4 @@ const getFilmsAmountElement = () => {
   );
 };
 
-export {getFilmsAmountElement};
+export default getFilmsAmountElement;

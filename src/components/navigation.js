@@ -12,4 +12,4 @@ const getNavigationElement = () => {
   );
 };
 
-export {getNavigationElement};
+export default getNavigationElement;

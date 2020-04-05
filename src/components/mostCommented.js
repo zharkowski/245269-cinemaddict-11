@@ -8,4 +8,4 @@ const getMostCommented = () => {
   );
 };
 
-export {getMostCommented};
+export default getMostCommented;

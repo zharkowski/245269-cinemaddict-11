@@ -20,4 +20,4 @@ const getFilmCard = () => {
   );
 };
 
-export {getFilmCard};
+export default getFilmCard;
