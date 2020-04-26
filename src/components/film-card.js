@@ -1,6 +1,9 @@
-const createFilmCardMarkup = (film) => {
+import {createElement} from "../utils";
+
+const createFilmCardTemplate = (film) => {
   const {title, rating, releaseDate, runtime, genres, poster, description, comments} = film;
   const releaseYear = releaseDate.split(` `)[2];
+  const shortDescription = description.length > 140 ? description.slice(0, 140) + `...` : description;
   return (
     `<article class="film-card">
       <h3 class="film-card__title">${title}</h3>
@@ -11,7 +14,7 @@ const createFilmCardMarkup = (film) => {
         <span class="film-card__genre">${genres[0]}</span>
       </p>
       <img src="./images/posters/${poster}" alt="" class="film-card__poster">
-      <p class="film-card__description">${description.length > 140 ? description.slice(0, 140) + `...` : description}</p>
+      <p class="film-card__description">${shortDescription}</p>
       <a class="film-card__comments">${comments.length} comment${comments.length !== 1 ? `s` : ``}</a>
       <form class="film-card__controls">
         <button class="film-card__controls-item button film-card__controls-item--add-to-watchlist">Add to watchlist</button>
@@ -22,10 +25,25 @@ const createFilmCardMarkup = (film) => {
   );
 };
 
-// const generateFilmCardsMarkup = (films) => {
-//   return films.map(
-//       (film) => generateFilmCardMarkup(film)
-//   ).join(`\n`);
-// };
+export default class FilmCard {
+  constructor(film) {
+    this._film = film;
+    this._element = null;
+  }
 
-export default createFilmCardMarkup;
+  getTemplate() {
+    return createFilmCardTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

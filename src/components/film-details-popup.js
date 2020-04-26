@@ -1,8 +1,10 @@
-const generateGenresMarkup = (genres) => {
+import {createElement} from "../utils";
+
+const createGenresTemplate = (genres) => {
   return genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(`\n`);
 };
 
-const generateCommentMarkup = (comment) => {
+const createCommentTemplate = (comment) => {
   const {text, emotion, author, date} = comment;
   return (
     `<li class="film-details__comment">
@@ -21,11 +23,11 @@ const generateCommentMarkup = (comment) => {
   );
 };
 
-const generateCommentsMarkup = (comments) => {
-  return comments.map((comment) => generateCommentMarkup(comment)).join(`\n`);
+const createCommentsTemplate = (comments) => {
+  return comments.map((comment) => createCommentTemplate(comment)).join(`\n`);
 };
 
-const getFilmDetailsMarkup = (film) => {
+const createFilmDetailsTemplate = (film) => {
   const {
     poster,
     ageRating,
@@ -97,7 +99,7 @@ const getFilmDetailsMarkup = (film) => {
                 <tr class="film-details__row">
                   <td class="film-details__term">Genre${genres.length !== 1 ? `s` : ``}</td>
                   <td class="film-details__cell">
-                    ${generateGenresMarkup(genres)}
+                    ${createGenresTemplate(genres)}
                 </tr>
               </table>
 
@@ -126,7 +128,7 @@ const getFilmDetailsMarkup = (film) => {
             </h3>
 
             <ul class="film-details__comments-list">
-              ${generateCommentsMarkup(comments)}
+              ${createCommentsTemplate(comments)}
             </ul>
 
             <div class="film-details__new-comment">
@@ -165,4 +167,25 @@ const getFilmDetailsMarkup = (film) => {
   );
 };
 
-export default getFilmDetailsMarkup;
+export default class FilmDetailsPopup {
+  constructor(film) {
+    this._film = film;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmDetailsTemplate(this._film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

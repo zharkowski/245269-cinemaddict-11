@@ -1,14 +1,14 @@
-import getProfileElement from "./components/profile.js";
-import getNavigationElement from "./components/navigation.js";
-import getSortingElement from "./components/sorting.js";
+import createProfileTemplate from "./components/profile.js";
+import createNavigationTemplate from "./components/navigation.js";
+import getSortTemplate from "./components/sort.js";
 import getBoardsContainer from "./components/boards-container.js";
 import getFilmsBoard from "./components/films-board.js";
 import createFilmCardMarkup from "./components/film-card.js";
-import getShowMoreButton from "./components/show-more-button.js";
-import getTopRatedBoard from "./components/top-rated-board.js";
-import getMostCommented from "./components/most-commented.js";
+import createShowMoreButtonTemplate from "./components/show-more-button.js";
+import createTopRatedBoardTemplate from "./components/top-rated-board.js";
+import createMostCommentedBoardTemplate from "./components/most-commented-board.js";
 import getFilmsAmountElement from "./components/films-amount-element.js";
-import getFilmDetailsMarkup from "./components/film-details-popup.js";
+import createFilmDetailsTemplate from "./components/film-details-popup.js";
 // mocks
 import generateFilms from './mocks/film-cards';
 // consts
@@ -25,18 +25,14 @@ const topRatedFilms = generateFilms(TOP_RATED_FILMS_COUNT);
 const mostCommentFilms = generateFilms(MOST_COMMENT_FILMS_COUNT);
 let showingFilmsCount = FIRST_SHOW_FILMS_COUNT;
 
-const render = (container, markup) => {
-  container.insertAdjacentHTML(`beforeend`, markup);
-};
-
 const bodyElement = document.querySelector(`body`);
 const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
 const headerFooter = document.querySelector(`.footer`);
 
-render(headerElement, getProfileElement());
-render(mainElement, getNavigationElement());
-render(mainElement, getSortingElement());
+render(headerElement, createProfileTemplate());
+render(mainElement, createNavigationTemplate());
+render(mainElement, getSortTemplate());
 render(mainElement, getBoardsContainer());
 
 const boardsContainer = mainElement.querySelector(`.films`);
@@ -68,7 +64,7 @@ const closePopupKeydownHandler = (evt) => {
 
 const openPopup = (film) => {
   closePopup();
-  render(bodyElement, getFilmDetailsMarkup(film));
+  render(bodyElement, createFilmDetailsTemplate(film));
   const popup = document.querySelector(`.film-details`);
   const closeButton = popup.querySelector(`.film-details__close-btn`);
   closeButton.addEventListener(`click`, closePopupClickHandler);
@@ -94,7 +90,7 @@ for (let i = 0; i < FIRST_SHOW_FILMS_COUNT; i++) {
   addEventListenerToFilmCard(films[i], filmCard);
 }
 
-render(filmsList, getShowMoreButton());
+render(filmsList, createShowMoreButtonTemplate());
 
 const showMoreButton = document.querySelector(`.films-list__show-more`);
 
@@ -118,8 +114,8 @@ const showMoreButtonClickHandler = () => {
 
 showMoreButton.addEventListener(`click`, showMoreButtonClickHandler);
 
-render(boardsContainer, getTopRatedBoard());
-render(boardsContainer, getMostCommented());
+render(boardsContainer, createTopRatedBoardTemplate());
+render(boardsContainer, createMostCommentedBoardTemplate());
 
 const topRatedContainer = boardsContainer.querySelector(`.films-list--extra:nth-child(2) .films-list__container`);
 const mostCommentedContainer = boardsContainer.querySelector(`.films-list--extra:nth-child(3) .films-list__container`);

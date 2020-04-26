@@ -1,18 +1,22 @@
 import {createElement} from "../utils";
 
-const createShowMoreButtonTemplate = () => {
+const createMostCommentedBoardTemplate = () => {
   return (
-    `<button class="films-list__show-more" tabindex="">Show more</button>`
+    `<section class="films-list--extra">
+      <h2 class="films-list__title">Most commented</h2>
+
+      <div class="films-list__container"></div>
+    </section>`
   );
 };
 
-export default class ShowMoreButton {
+export default class MostCommentedBoard {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createShowMoreButtonTemplate();
+    return createMostCommentedBoardTemplate();
   }
 
   getElement() {
