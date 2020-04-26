@@ -6,7 +6,7 @@ const createFilmsAmountTemplate = (amount) => {
   );
 };
 
-export default class FilmCard {
+export default class FilmAmount {
   constructor(amount) {
     this._amount = amount;
     this._element = null;

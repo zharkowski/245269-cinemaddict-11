@@ -1,22 +1,20 @@
 import {createElement} from "../utils";
 
-const createTopRatedBoardTemplate = () => {
+const createLoadTemplate = () => {
   return (
-    `<section class="films-list--extra">
-      <h2 class="films-list__title">Top rated</h2>
-
-      <div class="films-list__container"></div>
+    `<section class="films-list">
+      <h2 class="films-list__title">Loading...</h2>
     </section>`
   );
 };
 
-export default class TopRatedBoard {
+export default class Load {
   constructor() {
     this._element = null;
   }
 
   getTemplate() {
-    return createTopRatedBoardTemplate();
+    return createLoadTemplate();
   }
 
   getElement() {
