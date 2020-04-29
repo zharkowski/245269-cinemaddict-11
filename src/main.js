@@ -10,6 +10,7 @@ import TopRatedBoard from "./components/top-rated-board";
 import MostCommentedBoard from "./components/most-commented-board";
 import FilmAmount from "./components/films-amount-element";
 import FilmDetailsPopup from "./components/film-details-popup";
+import NoData from "./components/no-data";
 import Load from "./components/load";
 // mocks
 import generateFilms from './mocks/film-cards';
@@ -18,7 +19,7 @@ import {render} from "./utils";
 // const
 import {KEY, RENDER_POSITION} from './consts';
 
-const FILMS_COUNT = 24;
+const FILMS_COUNT = 22;
 const FIRST_SHOW_FILMS_COUNT = 5;
 const ON_BUTTON_CLICK_FILMS_COUNT = 5;
 const TOP_RATED_FILMS_COUNT = 2;
@@ -130,13 +131,21 @@ const renderMostCommentedBoard = (boardsContainerElement, films) => {
 };
 
 const films = generateFilms(FILMS_COUNT);
-renderFilmsBoard(boardsContainer, films);
+if (films.length !== 0) {
+  renderFilmsBoard(boardsContainer, films);
+} else {
+  render(boardsContainer, new NoData().getElement(), RENDER_POSITION.BEFOREEND);
+}
 
 const topRatedFilms = generateFilms(TOP_RATED_FILMS_COUNT);
-renderTopRatedBoard(boardsContainer, topRatedFilms);
+if (films.length !== 0) {
+  renderTopRatedBoard(boardsContainer, topRatedFilms);
+}
 
 const mostCommentFilms = generateFilms(MOST_COMMENT_FILMS_COUNT);
-renderMostCommentedBoard(boardsContainer, mostCommentFilms);
+if (films.length !== 0) {
+  renderMostCommentedBoard(boardsContainer, mostCommentFilms);
+}
 
 const footerStatistic = headerFooter.querySelector(`.footer__statistics`);
 render(footerStatistic, new FilmAmount(films.length).getElement(), RENDER_POSITION.BEFOREEND);
