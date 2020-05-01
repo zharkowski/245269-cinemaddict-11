@@ -7,20 +7,24 @@ import TopRatedBoard from "../components/top-rated-board";
 import MostCommentedBoard from "../components/most-commented-board";
 import generateFilms from "../mocks/film-cards";
 import NoData from "../components/no-data";
+import Sort from "../components/sort";
 // utils
 import {remove, render, RenderPosition} from "../utils/render";
 // const
 import {KEY} from "../consts";
+import BoardsContainer from "../components/boards-container";
 
 export default class PageController {
   constructor(container) {
     this._container = container;
 
     this._topRatedBoardComponent = new TopRatedBoard();
+    this._sortCompanent = new Sort();
     this._mostCommentBoardComponent = new MostCommentedBoard();
     this._noDataComponent = new NoData();
     this._showMoreButtonComponent = new ShowMoreButton();
     this._filmsBoardComponent = new FilmsBoard();
+    this._boardsContainer = new BoardsContainer();
   }
 
   render(films) {
@@ -108,20 +112,23 @@ export default class PageController {
       );
     };
 
+    render(this._container, this._sortCompanent, RenderPosition.BEFOREEND);
+    const boardsContainerComponent = this._boardsContainer;
+    render(this._container, boardsContainerComponent, RenderPosition.BEFOREEND);
     if (films.length !== 0) {
-      renderFilmsBoard(this._container, films);
+      renderFilmsBoard(boardsContainerComponent.getElement(), films);
     } else {
-      render(this._container, this._noDataComponent, RenderPosition.BEFOREEND);
+      render(boardsContainerComponent, this._noDataComponent, RenderPosition.BEFOREEND);
     }
 
     const topRatedFilms = generateFilms(TOP_RATED_FILMS_COUNT);
     if (films.length !== 0) {
-      renderTopRatedBoard(this._container, topRatedFilms);
+      renderTopRatedBoard(boardsContainerComponent.getElement(), topRatedFilms);
     }
 
     const mostCommentFilms = generateFilms(MOST_COMMENT_FILMS_COUNT);
     if (films.length !== 0) {
-      renderMostCommentedBoard(this._container, mostCommentFilms);
+      renderMostCommentedBoard(boardsContainerComponent.getElement(), mostCommentFilms);
     }
   }
 }
