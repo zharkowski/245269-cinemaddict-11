@@ -14,7 +14,7 @@ import NoData from "./components/no-data";
 // mocks
 import generateFilms from './mocks/film-cards';
 // utils
-import {render, RenderPosition} from "./utils/render";
+import {remove, render, RenderPosition} from "./utils/render";
 // const
 import {KEY} from './consts';
 
@@ -36,47 +36,31 @@ render(mainElement, new BoardsContainer(), RenderPosition.BEFOREEND);
 
 const boardsContainer = mainElement.querySelector(`.films`);
 
-const closePopup = () => {
-  const popup = document.querySelector(`.film-details`);
-  if (popup) {
-    const closeButton = popup.querySelector(`.film-details__close-btn`);
-    popup.remove();
-    closeButton.removeEventListener(`click`, closePopupClickHandler);
-  }
-  document.removeEventListener(`keydown`, closePopupKeydownHandler);
-};
-
-const closePopupClickHandler = () => {
-  closePopup();
-};
-
-const closePopupKeydownHandler = (evt) => {
-  if (evt.key === KEY.ESC) {
-    closePopup();
-  }
-};
-
 const openPopup = (film) => {
+  const filmDetailsPopupComponent = new FilmDetailsPopup(film);
+
+  const closePopup = () => {
+    remove(filmDetailsPopupComponent);
+    document.removeEventListener(`keydown`, closePopupKeydownHandler);
+  };
+
+  const closePopupKeydownHandler = (evt) => {
+    if (evt.key === KEY.ESC) {
+      closePopup();
+    }
+  };
+
   closePopup();
-  render(bodyElement, new FilmDetailsPopup(film), RenderPosition.BEFOREEND);
-  const popup = document.querySelector(`.film-details`);
-  const closeButton = popup.querySelector(`.film-details__close-btn`);
-  closeButton.addEventListener(`click`, closePopupClickHandler);
+  render(bodyElement, filmDetailsPopupComponent, RenderPosition.BEFOREEND);
+  filmDetailsPopupComponent.setCloseButtonClickHandler(closePopup);
   document.addEventListener(`keydown`, closePopupKeydownHandler);
 };
 
 const renderFilm = (filmsListElement, film) => {
   const filmCardComponent = new FilmCard(film);
-  const linkToPopupElements = filmCardComponent.getElement().querySelectorAll(
-      `.film-card__title,
-      .film-card__poster,
-      .film-card__comments`
-  );
-  linkToPopupElements.forEach(
-      (element) => {
-        element.addEventListener(`click`, () => openPopup(film));
-      }
-  );
+  filmCardComponent.setLinksToPopupClickHandlers(() => {
+    openPopup(film);
+  });
 
   render(filmsListElement, filmCardComponent, RenderPosition.BEFOREEND);
 };
@@ -94,20 +78,21 @@ const renderFilmsBoard = (boardsContainerElement, films) => {
   if (showingFilmsCount < films.length) {
     const showMoreButtonComponent = new ShowMoreButton();
     render(filmsList, showMoreButtonComponent, RenderPosition.BEFOREEND);
+    showMoreButtonComponent.setButtonClickHandler(
+        () => {
+          const prevFilmsCount = showingFilmsCount;
+          showingFilmsCount += ON_BUTTON_CLICK_FILMS_COUNT;
 
-    showMoreButtonComponent.getElement().addEventListener(`click`, () => {
-      const prevFilmsCount = showingFilmsCount;
-      showingFilmsCount += ON_BUTTON_CLICK_FILMS_COUNT;
+          films.slice(prevFilmsCount, showingFilmsCount).forEach(
+              (film) => renderFilm(filmsListContainerElement, film)
+          );
 
-      films.slice(prevFilmsCount, showingFilmsCount).forEach(
-          (film) => renderFilm(filmsListContainerElement, film)
-      );
-
-      if (showingFilmsCount >= films.length) {
-        showMoreButtonComponent.getElement().remove();
-        showMoreButtonComponent.getElement().removeElement();
-      }
-    });
+          if (showingFilmsCount >= films.length) {
+            showMoreButtonComponent.getElement().remove();
+            showMoreButtonComponent.getElement().removeElement();
+          }
+        }
+    );
   }
 };
 
