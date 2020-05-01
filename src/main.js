@@ -29,10 +29,10 @@ const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
 const headerFooter = document.querySelector(`.footer`);
 
-render(headerElement, new Profile().getElement(), RenderPosition.BEFOREEND);
-render(mainElement, new Navigation().getElement(), RenderPosition.BEFOREEND);
-render(mainElement, new Sort().getElement(), RenderPosition.BEFOREEND);
-render(mainElement, new BoardsContainer().getElement(), RenderPosition.BEFOREEND);
+render(headerElement, new Profile(), RenderPosition.BEFOREEND);
+render(mainElement, new Navigation(), RenderPosition.BEFOREEND);
+render(mainElement, new Sort(), RenderPosition.BEFOREEND);
+render(mainElement, new BoardsContainer(), RenderPosition.BEFOREEND);
 
 const boardsContainer = mainElement.querySelector(`.films`);
 
@@ -58,7 +58,7 @@ const closePopupKeydownHandler = (evt) => {
 
 const openPopup = (film) => {
   closePopup();
-  render(bodyElement, new FilmDetailsPopup(film).getElement(), RenderPosition.BEFOREEND);
+  render(bodyElement, new FilmDetailsPopup(film), RenderPosition.BEFOREEND);
   const popup = document.querySelector(`.film-details`);
   const closeButton = popup.querySelector(`.film-details__close-btn`);
   closeButton.addEventListener(`click`, closePopupClickHandler);
@@ -78,11 +78,11 @@ const renderFilm = (filmsListElement, film) => {
       }
   );
 
-  render(filmsListElement, filmCardComponent.getElement(), RenderPosition.BEFOREEND);
+  render(filmsListElement, filmCardComponent, RenderPosition.BEFOREEND);
 };
 
 const renderFilmsBoard = (boardsContainerElement, films) => {
-  render(boardsContainerElement, new FilmsBoard().getElement(), RenderPosition.BEFOREEND);
+  render(boardsContainerElement, new FilmsBoard(), RenderPosition.BEFOREEND);
   const filmsList = boardsContainerElement.querySelector(`.films-list`);
   const filmsListContainerElement = boardsContainerElement.querySelector(`.films-list__container`);
 
@@ -93,7 +93,7 @@ const renderFilmsBoard = (boardsContainerElement, films) => {
 
   if (showingFilmsCount < films.length) {
     const showMoreButtonComponent = new ShowMoreButton();
-    render(filmsList, showMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
+    render(filmsList, showMoreButtonComponent, RenderPosition.BEFOREEND);
 
     showMoreButtonComponent.getElement().addEventListener(`click`, () => {
       const prevFilmsCount = showingFilmsCount;
@@ -112,18 +112,18 @@ const renderFilmsBoard = (boardsContainerElement, films) => {
 };
 
 const renderTopRatedBoard = (boardsContainerElement, films) => {
-  const topRatedBoardElement = new TopRatedBoard().getElement();
-  render(boardsContainerElement, topRatedBoardElement, RenderPosition.BEFOREEND);
-  const filmsListContainerElement = topRatedBoardElement.querySelector(`.films-list__container`);
+  const topRatedBoardComponent = new TopRatedBoard();
+  render(boardsContainerElement, topRatedBoardComponent, RenderPosition.BEFOREEND);
+  const filmsListContainerElement = topRatedBoardComponent.getElement().querySelector(`.films-list__container`);
   films.forEach(
       (film) => renderFilm(filmsListContainerElement, film)
   );
 };
 
 const renderMostCommentedBoard = (boardsContainerElement, films) => {
-  const mostCommentedBoardElement = new MostCommentedBoard().getElement();
-  render(boardsContainerElement, mostCommentedBoardElement, RenderPosition.BEFOREEND);
-  const filmsListContainerElement = mostCommentedBoardElement.querySelector(`.films-list__container`);
+  const mostCommentedBoardComponent = new MostCommentedBoard();
+  render(boardsContainerElement, mostCommentedBoardComponent, RenderPosition.BEFOREEND);
+  const filmsListContainerElement = mostCommentedBoardComponent.getElement().querySelector(`.films-list__container`);
   films.forEach(
       (film) => renderFilm(filmsListContainerElement, film)
   );
@@ -133,7 +133,7 @@ const films = generateFilms(FILMS_COUNT);
 if (films.length !== 0) {
   renderFilmsBoard(boardsContainer, films);
 } else {
-  render(boardsContainer, new NoData().getElement(), RenderPosition.BEFOREEND);
+  render(boardsContainer, new NoData(), RenderPosition.BEFOREEND);
 }
 
 const topRatedFilms = generateFilms(TOP_RATED_FILMS_COUNT);
@@ -147,4 +147,4 @@ if (films.length !== 0) {
 }
 
 const footerStatistic = headerFooter.querySelector(`.footer__statistics`);
-render(footerStatistic, new FilmAmount(films.length).getElement(), RenderPosition.BEFOREEND);
+render(footerStatistic, new FilmAmount(films.length), RenderPosition.BEFOREEND);
