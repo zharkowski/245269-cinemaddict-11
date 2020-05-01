@@ -11,13 +11,12 @@ import MostCommentedBoard from "./components/most-commented-board";
 import FilmAmount from "./components/films-amount-element";
 import FilmDetailsPopup from "./components/film-details-popup";
 import NoData from "./components/no-data";
-import Load from "./components/load";
 // mocks
 import generateFilms from './mocks/film-cards';
 // utils
-import {render} from "./utils";
+import {render, RenderPosition} from "./utils/render";
 // const
-import {KEY, RENDER_POSITION} from './consts';
+import {KEY} from './consts';
 
 const FILMS_COUNT = 22;
 const FIRST_SHOW_FILMS_COUNT = 5;
@@ -30,10 +29,10 @@ const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
 const headerFooter = document.querySelector(`.footer`);
 
-render(headerElement, new Profile().getElement(), RENDER_POSITION.BEFOREEND);
-render(mainElement, new Navigation().getElement(), RENDER_POSITION.BEFOREEND);
-render(mainElement, new Sort().getElement(), RENDER_POSITION.BEFOREEND);
-render(mainElement, new BoardsContainer().getElement(), RENDER_POSITION.BEFOREEND);
+render(headerElement, new Profile().getElement(), RenderPosition.BEFOREEND);
+render(mainElement, new Navigation().getElement(), RenderPosition.BEFOREEND);
+render(mainElement, new Sort().getElement(), RenderPosition.BEFOREEND);
+render(mainElement, new BoardsContainer().getElement(), RenderPosition.BEFOREEND);
 
 const boardsContainer = mainElement.querySelector(`.films`);
 
@@ -59,7 +58,7 @@ const closePopupKeydownHandler = (evt) => {
 
 const openPopup = (film) => {
   closePopup();
-  render(bodyElement, new FilmDetailsPopup(film).getElement(), RENDER_POSITION.BEFOREEND);
+  render(bodyElement, new FilmDetailsPopup(film).getElement(), RenderPosition.BEFOREEND);
   const popup = document.querySelector(`.film-details`);
   const closeButton = popup.querySelector(`.film-details__close-btn`);
   closeButton.addEventListener(`click`, closePopupClickHandler);
@@ -79,11 +78,11 @@ const renderFilm = (filmsListElement, film) => {
       }
   );
 
-  render(filmsListElement, filmCardComponent.getElement(), RENDER_POSITION.BEFOREEND);
+  render(filmsListElement, filmCardComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
 const renderFilmsBoard = (boardsContainerElement, films) => {
-  render(boardsContainerElement, new FilmsBoard().getElement(), RENDER_POSITION.BEFOREEND);
+  render(boardsContainerElement, new FilmsBoard().getElement(), RenderPosition.BEFOREEND);
   const filmsList = boardsContainerElement.querySelector(`.films-list`);
   const filmsListContainerElement = boardsContainerElement.querySelector(`.films-list__container`);
 
@@ -94,7 +93,7 @@ const renderFilmsBoard = (boardsContainerElement, films) => {
 
   if (showingFilmsCount < films.length) {
     const showMoreButtonComponent = new ShowMoreButton();
-    render(filmsList, showMoreButtonComponent.getElement(), RENDER_POSITION.BEFOREEND);
+    render(filmsList, showMoreButtonComponent.getElement(), RenderPosition.BEFOREEND);
 
     showMoreButtonComponent.getElement().addEventListener(`click`, () => {
       const prevFilmsCount = showingFilmsCount;
@@ -114,7 +113,7 @@ const renderFilmsBoard = (boardsContainerElement, films) => {
 
 const renderTopRatedBoard = (boardsContainerElement, films) => {
   const topRatedBoardElement = new TopRatedBoard().getElement();
-  render(boardsContainerElement, topRatedBoardElement, RENDER_POSITION.BEFOREEND);
+  render(boardsContainerElement, topRatedBoardElement, RenderPosition.BEFOREEND);
   const filmsListContainerElement = topRatedBoardElement.querySelector(`.films-list__container`);
   films.forEach(
       (film) => renderFilm(filmsListContainerElement, film)
@@ -123,7 +122,7 @@ const renderTopRatedBoard = (boardsContainerElement, films) => {
 
 const renderMostCommentedBoard = (boardsContainerElement, films) => {
   const mostCommentedBoardElement = new MostCommentedBoard().getElement();
-  render(boardsContainerElement, mostCommentedBoardElement, RENDER_POSITION.BEFOREEND);
+  render(boardsContainerElement, mostCommentedBoardElement, RenderPosition.BEFOREEND);
   const filmsListContainerElement = mostCommentedBoardElement.querySelector(`.films-list__container`);
   films.forEach(
       (film) => renderFilm(filmsListContainerElement, film)
@@ -134,7 +133,7 @@ const films = generateFilms(FILMS_COUNT);
 if (films.length !== 0) {
   renderFilmsBoard(boardsContainer, films);
 } else {
-  render(boardsContainer, new NoData().getElement(), RENDER_POSITION.BEFOREEND);
+  render(boardsContainer, new NoData().getElement(), RenderPosition.BEFOREEND);
 }
 
 const topRatedFilms = generateFilms(TOP_RATED_FILMS_COUNT);
@@ -148,4 +147,4 @@ if (films.length !== 0) {
 }
 
 const footerStatistic = headerFooter.querySelector(`.footer__statistics`);
-render(footerStatistic, new FilmAmount(films.length).getElement(), RENDER_POSITION.BEFOREEND);
+render(footerStatistic, new FilmAmount(films.length).getElement(), RenderPosition.BEFOREEND);

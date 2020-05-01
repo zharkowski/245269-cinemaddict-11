@@ -1,4 +1,4 @@
-import {getRandomElement, getRandomUniqueElements, getRandomNumber, getRandomKey} from '../utils';
+import {getRandomElement, getRandomUniqueElements, getRandomNumber, getRandomKey} from '../utils/common';
 import {
   FILM_TITLES_TO_ORIGINAL_TITLES,
   FILM_POSTERS,

@@ -1,5 +1,5 @@
 import {FILTERS} from '../consts';
-import {getFirstWord} from '../utils';
+import {getFirstWord} from '../utils/common';
 
 const generateFilters = () => {
   return FILTERS.map(

@@ -1,4 +1,4 @@
-import {createElement} from "../utils";
+import AbstractComponent from "./abstract-component";
 
 const createLoadTemplate = () => {
   return (
@@ -8,24 +8,8 @@ const createLoadTemplate = () => {
   );
 };
 
-export default class Load {
-  constructor() {
-    this._element = null;
-  }
-
+export default class Load extends AbstractComponent {
   getTemplate() {
     return createLoadTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
