@@ -1,4 +1,4 @@
-import {getRandomElement, getRandomUniqueElements, getRandomNumber, getRandomKey} from '../utils/common';
+import {getRandomElement, getRandomUniqueElements, getRandomNumber, getRandomKey, getRandomDate} from '../utils/common';
 import {
   FILM_TITLES_TO_ORIGINAL_TITLES,
   FILM_POSTERS,
@@ -41,7 +41,7 @@ const generateFilm = () => {
     actors: getRandomUniqueElements(ACTORS, getRandomNumber(ACTORS.length - 1, 1)),
     comments: generateComments(getRandomNumber(5)),
     rating: getRandomNumber(5, 1),
-    releaseDate: getRandomNumber(31, 1) + ` ` + getRandomElement(MONTH_NAMES) + ` ` + getRandomNumber(2020, 1895),
+    releaseDate: getRandomDate(new Date(1895, 1, 25), new Date()),
     runtime: getRandomNumber(10, 0) + `h ` + getRandomNumber(59, 0) + `m`,
     country: getRandomElement(COUNTRIES),
     genres: getRandomUniqueElements(GENRES, getRandomNumber(GENRES.length - 1, 1)),

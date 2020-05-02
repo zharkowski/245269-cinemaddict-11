@@ -18,3 +18,5 @@ export const getRandomKey = (collection) => {
   let keys = Array.from(collection.keys());
   return keys[getRandomNumber(keys.length - 1)];
 };
+
+export const getRandomDate = (start, end) => new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
