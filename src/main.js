@@ -9,7 +9,7 @@ import {render, RenderPosition} from "./utils/render";
 // const
 import PageController from "./controllers/page";
 
-const FILMS_COUNT = 22;
+const FILMS_COUNT = 17;
 
 const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);

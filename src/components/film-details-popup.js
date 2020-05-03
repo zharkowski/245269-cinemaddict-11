@@ -1,5 +1,5 @@
 import AbstractComponent from "./abstract-component";
-import {EMOTIONS} from "../consts";
+import {EMOTIONS, MONTH_NAMES} from "../consts";
 
 const createGenresTemplate = (genres) => {
   return genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(`\n`);
@@ -59,6 +59,10 @@ const createFilmDetailsTemplate = (film) => {
     comments
   } = film;
 
+  const releaseDay = releaseDate.getDay();
+  const releaseMonth = releaseDate.getMonth();
+  const releaseYear = releaseDate.getFullYear();
+
   return (
     `<section class="film-details">
       <form class="film-details__inner" action="" method="get">
@@ -100,7 +104,7 @@ const createFilmDetailsTemplate = (film) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
-                  <td class="film-details__cell">${releaseDate}</td>
+                  <td class="film-details__cell">${releaseDay} ${MONTH_NAMES[releaseMonth]} ${releaseYear}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>

@@ -2,7 +2,7 @@ import AbstractComponent from "./abstract-component";
 
 const createFilmCardTemplate = (film) => {
   const {title, rating, releaseDate, runtime, genres, poster, description, comments} = film;
-  const releaseYear = releaseDate.split(` `)[2];
+  const releaseYear = releaseDate.getFullYear();
   const shortDescription = description.length > 140 ? description.slice(0, 140) + `...` : description;
   return (
     `<article class="film-card">
