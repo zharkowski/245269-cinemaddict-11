@@ -118,7 +118,3 @@ export const KEY = {
   ENTER: `Enter`,
   ESC: `Escape`
 };
-export const RENDER_POSITION = {
-  AFTERBEGIN: `afterbegin`,
-  BEFOREEND: `beforeend`
-};
