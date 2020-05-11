@@ -1,17 +1,15 @@
 // components
-import FilmDetailsPopup from "../components/film-details-popup";
-import FilmCard from "../components/film-card";
 import FilmsBoard from "../components/films-board";
 import ShowMoreButton from "../components/show-more-button";
 import TopRatedBoard from "../components/top-rated-board";
 import MostCommentedBoard from "../components/most-commented-board";
 import NoData from "../components/no-data";
 import Sort, {SortType} from "../components/sort";
+import BoardsContainer from "../components/boards-container";
 // utils
 import {remove, render, RenderPosition} from "../utils/render";
-// const
-import {KEY} from "../consts";
-import BoardsContainer from "../components/boards-container";
+// controllers
+import FilmController from "./film";
 
 const FIRST_SHOW_FILMS_COUNT = 5;
 const ON_BUTTON_CLICK_FILMS_COUNT = 5;
@@ -37,39 +35,12 @@ const getSortedFilms = (films, sortType, from, to) => {
   return sortedFilms.slice(from, to);
 };
 
-const openPopup = (film) => {
-  const closePopup = () => {
-    remove(filmDetailsPopupComponent);
-    document.removeEventListener(`keydown`, closePopupKeydownHandler);
-  };
-
-  const filmDetailsPopupComponent = new FilmDetailsPopup(film);
-
-  const closePopupKeydownHandler = (evt) => {
-    if (evt.key === KEY.ESC) {
-      closePopup();
-    }
-  };
-
-  closePopup();
-  const container = document.querySelector(`body`);
-  render(container, filmDetailsPopupComponent, RenderPosition.BEFOREEND);
-  filmDetailsPopupComponent.setCloseButtonClickHandler(closePopup);
-  document.addEventListener(`keydown`, closePopupKeydownHandler);
-};
-
-const renderFilm = (filmsListElement, film) => {
-  const filmCardComponent = new FilmCard(film);
-  filmCardComponent.setLinksToPopupClickHandlers(() => {
-    openPopup(film);
-  });
-
-  render(filmsListElement, filmCardComponent, RenderPosition.BEFOREEND);
-};
-
 const renderFilms = (filmsListElement, films) => {
   films.forEach(
-      (task) => renderFilm(filmsListElement, task)
+      (film) => {
+        const filmController = new FilmController(filmsListElement);
+        filmController.render(film);
+      }
   );
 };
 
@@ -103,7 +74,7 @@ export default class PageController {
       if (showingFilmsCount < films.length) {
         renderShowMoreButton();
         const showMoreButtonComponent = this._showMoreButtonComponent;
-        showMoreButtonComponent.setButtonClickHandler(() => {
+        showMoreButtonComponent.setClickHandler(() => {
           const prevFilmsCount = showingFilmsCount;
           showingFilmsCount += ON_BUTTON_CLICK_FILMS_COUNT;
 
