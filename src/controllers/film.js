@@ -1,11 +1,12 @@
-import FilmCard from "../components/film-card";
+import Film from "../components/film";
 import {remove, render, RenderPosition} from "../utils/render";
 import FilmDetailsPopup from "../components/film-details-popup";
 import {KEY} from "../consts";
 
 export default class FilmController {
-  constructor(container) {
+  constructor(container, dataChangeHandler) {
     this._container = container;
+    this._dataChangeHandler = dataChangeHandler;
   }
 
   render(film) {
@@ -23,18 +24,29 @@ export default class FilmController {
         }
       };
 
-      closePopup();
       const container = document.querySelector(`body`);
       render(container, filmDetailsPopupComponent, RenderPosition.BEFOREEND);
       filmDetailsPopupComponent.setCloseButtonClickHandler(closePopup);
       document.addEventListener(`keydown`, closePopupKeydownHandler);
     };
 
-    const filmCardComponent = new FilmCard(film);
-    filmCardComponent.setLinksToPopupClickHandlers(() => {
+    const filmComponent = new Film(film);
+    filmComponent.setLinksToPopupClickHandlers(() => {
       openPopup(film);
     });
 
-    render(this._container, filmCardComponent, RenderPosition.BEFOREEND);
+    filmComponent.setAddToWatchlistClickHandler(() => {
+      this._dataChangeHandler(this, film, Object.assign({}, film, {isInWatchlist: !film.isInWatchlist}));
+    });
+
+    filmComponent.setMarkAsWatchedClickHandler(() => {
+      this._dataChangeHandler(this, film, Object.assign({}, film, {isWatched: !film.isWatched}));
+    });
+
+    filmComponent.setFavoriteClickHandler(() => {
+      this._dataChangeHandler(this, film, Object.assign({}, film, {isFavorite: !film.isFavorite}));
+    });
+
+    render(this._container, filmComponent, RenderPosition.BEFOREEND);
   }
 }

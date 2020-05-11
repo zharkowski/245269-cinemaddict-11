@@ -25,7 +25,7 @@ const createFilmCardTemplate = (film) => {
   );
 };
 
-export default class FilmCard extends AbstractComponent {
+export default class Film extends AbstractComponent {
   constructor(film) {
     super();
     this._film = film;
@@ -45,5 +45,17 @@ export default class FilmCard extends AbstractComponent {
           element.addEventListener(`click`, cb);
         }
     );
+  }
+
+  setAddToWatchlistClickHandler(cb) {
+    this.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`).addEventListener(`click`, cb);
+  }
+
+  setMarkAsWatchedClickHandler(cb) {
+    this.getElement().querySelector(`.film-card__controls-item--mark-as-watched`).addEventListener(`click`, cb);
+  }
+
+  setFavoriteClickHandler(cb) {
+    this.getElement().querySelector(`.film-card__controls-item--favorite`).addEventListener(`click`, cb);
   }
 }
