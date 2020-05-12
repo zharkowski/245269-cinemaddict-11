@@ -1,5 +1,5 @@
-import AbstractComponent from "./abstract-component";
 import {EMOTIONS, MONTH_NAMES} from "../consts";
+import AbstractSmartComponent from "./abstract-smart-component";
 
 const createGenresTemplate = (genres) => {
   return genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(`\n`);
@@ -28,11 +28,11 @@ const createCommentsTemplate = (comments) => {
   return comments.map((comment) => createCommentTemplate(comment)).join(`\n`);
 };
 
-const createEmotionsTemplate = () => {
+const createEmotionsTemplate = (activeEmoji) => {
   return EMOTIONS.map(
       (emotion) => {
         return (
-          `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emotion}" value="${emotion}">
+          `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emotion}" value="${emotion}" ${emotion === activeEmoji ? `checked=""` : ``}>
           <label class="film-details__emoji-label" for="emoji-${emotion}">
             <img src="./images/emoji/${emotion}.png" width="30" height="30" alt="emoji">
           </label>`
@@ -41,7 +41,7 @@ const createEmotionsTemplate = () => {
   ).join(`\n`);
 };
 
-const createFilmDetailsTemplate = (film) => {
+const createFilmDetailsTemplate = (film, options) => {
   const {
     poster,
     ageRating,
@@ -58,6 +58,9 @@ const createFilmDetailsTemplate = (film) => {
     description,
     comments
   } = film;
+  const {
+    activeEmoji
+  } = options;
 
   const releaseDay = releaseDate.getDay();
   const releaseMonth = releaseDate.getMonth();
@@ -150,14 +153,16 @@ const createFilmDetailsTemplate = (film) => {
             </ul>
 
             <div class="film-details__new-comment">
-              <div for="add-emoji" class="film-details__add-emoji-label"></div>
+              <div for="add-emoji" class="film-details__add-emoji-label">
+                ${activeEmoji ? `<img src="images/emoji/${activeEmoji}.png" alt="emoji-${activeEmoji}" width="55" height="55">` : ``}
+              </div>
 
               <label class="film-details__comment-label">
                 <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
               </label>
 
               <div class="film-details__emoji-list">
-                ${createEmotionsTemplate()}
+                ${createEmotionsTemplate(activeEmoji)}
               </div>
             </div>
           </section>
@@ -167,18 +172,40 @@ const createFilmDetailsTemplate = (film) => {
   );
 };
 
-export default class FilmDetailsPopup extends AbstractComponent {
+export default class FilmDetailsPopup extends AbstractSmartComponent {
   constructor(film) {
     super();
     this._film = film;
+    this._activeEmoji = null;
+    this._closeButtonClickHandler = null;
+
+    this._subscribeOnEvents();
+  }
+
+  _subscribeOnEvents() {
+    const element = this.getElement();
+
+    const emojiButtons = element.querySelectorAll(`.film-details__emoji-item`);
+    emojiButtons.forEach((button) => {
+      button.addEventListener(`click`, () => {
+        this._activeEmoji = button.value;
+        this.rerender();
+      });
+    });
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._film);
+    return createFilmDetailsTemplate(this._film, {activeEmoji: this._activeEmoji});
+  }
+
+  recoveryListeners() {
+    this.setCloseButtonClickHandler(this._closeButtonClickHandler);
+    this._subscribeOnEvents();
   }
 
   setCloseButtonClickHandler(cb) {
     this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, cb);
+    this._closeButtonClickHandler = cb;
   }
 
   setAddToWatchlistClickHandler(cb) {
