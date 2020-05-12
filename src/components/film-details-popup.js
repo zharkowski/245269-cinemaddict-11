@@ -1,5 +1,6 @@
-import {EMOTIONS, MONTH_NAMES} from "../consts";
+import {EMOTIONS, msInMin} from "../consts";
 import AbstractSmartComponent from "./abstract-smart-component";
+import moment from "moment";
 
 const createGenresTemplate = (genres) => {
   return genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(`\n`);
@@ -7,6 +8,9 @@ const createGenresTemplate = (genres) => {
 
 const createCommentTemplate = (comment) => {
   const {text, emotion, author, date} = comment;
+  // const formattedDate = moment(date).format(`YYYY/MM/DD HH:mm`);
+  const formattedDate = moment(date).fromNow();
+  console.log(date);
   return (
     `<li class="film-details__comment">
       <span class="film-details__comment-emoji">
@@ -16,7 +20,7 @@ const createCommentTemplate = (comment) => {
         <p class="film-details__comment-text">${text}</p>
         <p class="film-details__comment-info">
           <span class="film-details__comment-author">${author}</span>
-          <span class="film-details__comment-day">${date}</span>
+          <span class="film-details__comment-day">${formattedDate}</span>
           <button class="film-details__comment-delete">Delete</button>
         </p>
       </div>
@@ -62,9 +66,8 @@ const createFilmDetailsTemplate = (film, options) => {
     activeEmoji
   } = options;
 
-  const releaseDay = releaseDate.getDay();
-  const releaseMonth = releaseDate.getMonth();
-  const releaseYear = releaseDate.getFullYear();
+  const formattedReleaseDate = moment(releaseDate).format(`DD MMMM YYYY`);
+  const formattedRuntime = moment(runtime * msInMin).format(`H[h] m[m]`);
 
   return (
     `<section class="film-details">
@@ -107,11 +110,11 @@ const createFilmDetailsTemplate = (film, options) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Release Date</td>
-                  <td class="film-details__cell">${releaseDay} ${MONTH_NAMES[releaseMonth]} ${releaseYear}</td>
+                  <td class="film-details__cell">${formattedReleaseDate}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Runtime</td>
-                  <td class="film-details__cell">${runtime}</td>
+                  <td class="film-details__cell">${formattedRuntime}</td>
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>

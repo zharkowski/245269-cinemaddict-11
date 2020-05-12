@@ -20,7 +20,7 @@ const generateComment = () => {
     text: getRandomElement(DESCRIPTION_SENTENCES),
     emotion: getRandomElement(EMOTIONS),
     author: getRandomElement(COMMENTATOR_NAMES),
-    date: `2019/12/31 23:59`
+    date: getRandomDate(new Date(2020, 4), new Date()),
   };
 };
 
@@ -41,7 +41,7 @@ const generateFilm = () => {
     comments: generateComments(getRandomNumber(5)),
     rating: getRandomNumber(5, 1),
     releaseDate: getRandomDate(new Date(1895, 1, 25), new Date()),
-    runtime: getRandomNumber(10, 0) + `h ` + getRandomNumber(59, 0) + `m`,
+    runtime: getRandomNumber(300),
     country: getRandomElement(COUNTRIES),
     genres: getRandomUniqueElements(GENRES, getRandomNumber(GENRES.length - 1, 1)),
     ageRating: getRandomElement(AGE_RATINGS),

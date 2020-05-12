@@ -3,7 +3,7 @@ import Profile from "./components/profile";
 import Navigation from "./components/navigation";
 import FilmAmount from "./components/films-amount-element";
 // mocks
-import generateFilms from './mocks/film-cards';
+import generateFilms from './mocks/film';
 // utils
 import {render, RenderPosition} from "./utils/render";
 // const
