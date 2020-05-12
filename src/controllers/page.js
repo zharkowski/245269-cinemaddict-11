@@ -58,8 +58,14 @@ export default class PageController {
     this._sortComponent.setSortTypeChangeHandler(this._sortTypeChangeHandler);
   }
 
-  _dataChangeHandler() {
+  _dataChangeHandler(filmController, oldFilm, newFilm) {
+    const index = this._films.findIndex((it) => it === oldFilm);
+    if (index === -1) {
+      return;
+    }
 
+    this._films = [].concat(this._films.slice(0, index), newFilm, this._films.slice(index + 1));
+    filmController.render(this._films[index]);
   }
 
   _renderFilms(filmsListElement, films) {
