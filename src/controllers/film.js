@@ -4,35 +4,47 @@ import FilmDetailsPopup from "../components/film-details-popup";
 import {KEY} from "../consts";
 
 export default class FilmController {
-  constructor(container, dataChangeHandler) {
+  constructor(container, dataChangeHandler, viewChangeHandler) {
     this._container = container;
     this._dataChangeHandler = dataChangeHandler;
+    this._viewChangeHandler = viewChangeHandler;
+    this._filmDetailsPopup = null;
+
+    this._closePopup = this._closePopup.bind(this);
+    this._closePopupKeydownHandler = this._closePopupKeydownHandler.bind(this);
+  }
+
+  _closePopup() {
+    if (this._filmDetailsPopup) {
+      remove(this._filmDetailsPopup);
+    }
+    document.removeEventListener(`keydown`, this._closePopupKeydownHandler);
+  }
+
+  _closePopupKeydownHandler(evt) {
+    if (evt.key === KEY.ESC) {
+      this._closePopup();
+    }
+  }
+
+  _openPopup(film) {
+    this._viewChangeHandler();
+    this._filmDetailsPopup = new FilmDetailsPopup(film);
+
+    const container = document.querySelector(`body`);
+    render(container, this._filmDetailsPopup, RenderPosition.BEFOREEND);
+    this._filmDetailsPopup.setCloseButtonClickHandler(this._closePopup);
+    document.addEventListener(`keydown`, this._closePopupKeydownHandler);
+  }
+
+  setDefaultView() {
+    this._closePopup();
   }
 
   render(film) {
-    const openPopup = () => {
-      const closePopup = () => {
-        remove(filmDetailsPopupComponent);
-        document.removeEventListener(`keydown`, closePopupKeydownHandler);
-      };
-
-      const filmDetailsPopupComponent = new FilmDetailsPopup(film);
-
-      const closePopupKeydownHandler = (evt) => {
-        if (evt.key === KEY.ESC) {
-          closePopup();
-        }
-      };
-
-      const container = document.querySelector(`body`);
-      render(container, filmDetailsPopupComponent, RenderPosition.BEFOREEND);
-      filmDetailsPopupComponent.setCloseButtonClickHandler(closePopup);
-      document.addEventListener(`keydown`, closePopupKeydownHandler);
-    };
-
     const filmComponent = new Film(film);
     filmComponent.setLinksToPopupClickHandlers(() => {
-      openPopup(film);
+      this._openPopup(film);
     });
 
     filmComponent.setAddToWatchlistClickHandler(() => {

@@ -54,8 +54,13 @@ export default class PageController {
     this._boardsContainer = new BoardsContainer();
 
     this._dataChangeHandler = this._dataChangeHandler.bind(this);
+    this._viewChangeHandler = this._viewChangeHandler.bind(this);
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
     this._sortComponent.setSortTypeChangeHandler(this._sortTypeChangeHandler);
+  }
+
+  _viewChangeHandler() {
+    this._showingFilmsControllers.forEach((controller) => controller.setDefaultView());
   }
 
   _dataChangeHandler(filmController, oldFilm, newFilm) {
@@ -70,7 +75,7 @@ export default class PageController {
 
   _renderFilms(filmsListElement, films) {
     return films.map((film) => {
-      const filmController = new FilmController(filmsListElement, this._dataChangeHandler);
+      const filmController = new FilmController(filmsListElement, this._dataChangeHandler, this._viewChangeHandler);
       filmController.render(film);
       return filmController;
     });
