@@ -1,18 +1,5 @@
+export const msInMin = 60 * 1000;
 export const FILTERS = [`All movies`, `Watchlist`, `History`, `Favorites`];
-export const MONTH_NAMES = [
-  `January`,
-  `February`,
-  `March`,
-  `April`,
-  `May`,
-  `June`,
-  `July`,
-  `August`,
-  `September`,
-  `October`,
-  `November`,
-  `December`
-];
 export const DIRECTORS = [
   `Quentin Tarantino`,
   `Christopher Nolan`,
