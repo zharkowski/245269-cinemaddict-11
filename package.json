@@ -15,10 +15,7 @@
     }
   },
   "lint-staged": {
-    "src/**/*.js": [
-      "npm run eslint",
-      "git add"
-    ]
+    "src/**/*.js": ["npm run eslint"]
   },
   "devDependencies": {
     "@webpack-cli/init": "0.3.0",
