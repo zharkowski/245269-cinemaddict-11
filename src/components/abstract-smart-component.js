@@ -1,6 +1,6 @@
 import AbstractComponent from "./abstract-component";
 
-export default class AbstractSmartComponent extends AbstractComponent{
+export default class AbstractSmartComponent extends AbstractComponent {
   constructor() {
     if (new.target === AbstractSmartComponent) {
       throw new Error(`Can't instantiate AbstractSmartComponent, only concrete one.`);
