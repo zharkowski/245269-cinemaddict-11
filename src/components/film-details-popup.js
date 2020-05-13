@@ -8,9 +8,7 @@ const createGenresTemplate = (genres) => {
 
 const createCommentTemplate = (comment) => {
   const {text, emotion, author, date} = comment;
-  // const formattedDate = moment(date).format(`YYYY/MM/DD HH:mm`);
   const formattedDate = moment(date).fromNow();
-  console.log(date);
   return (
     `<li class="film-details__comment">
       <span class="film-details__comment-emoji">

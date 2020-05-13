@@ -9,10 +9,16 @@
     "eslint": "eslint src/**/*.js",
     "test": "npm run eslint"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run eslint"
+    }
+  },
   "devDependencies": {
     "@webpack-cli/init": "0.3.0",
     "eslint": "6.1.0",
     "eslint-config-htmlacademy": "0.5.2",
+    "husky": "4.2.5",
     "moment": "2.25.3",
     "moment-locales-webpack-plugin": "1.2.0",
     "webpack": "^4.42.1",
