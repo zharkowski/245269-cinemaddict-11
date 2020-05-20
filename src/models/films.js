@@ -1,4 +1,4 @@
-export default class Film {
+export default class Films {
   constructor() {
     this._films = null;
   }
