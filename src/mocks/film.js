@@ -17,6 +17,7 @@ const DESCRIPTION_MAX_VALUE = 5;
 
 const generateComment = () => {
   return {
+    id: String(new Date() + Math.random()),
     text: getRandomElement(DESCRIPTION_SENTENCES),
     emotion: getRandomElement(EMOTIONS),
     author: getRandomElement(COMMENTATOR_NAMES),
@@ -31,6 +32,7 @@ const generateComments = (amount) => {
 const generateFilm = () => {
   const titleKey = getRandomKey(FILM_TITLES_TO_ORIGINAL_TITLES);
   return {
+    id: String(new Date() + Math.random()),
     title: titleKey,
     originalTitle: FILM_TITLES_TO_ORIGINAL_TITLES.get(titleKey),
     poster: getRandomElement(FILM_POSTERS),
