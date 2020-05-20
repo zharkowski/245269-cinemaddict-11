@@ -5,7 +5,7 @@ import {msInMin} from "../consts";
 const createFilmCardTemplate = (film) => {
   const {title, rating, releaseDate, runtime, genres, poster, description, comments} = film;
   const releaseYear = moment(releaseDate).format(`YYYY`);
-  const shortDescription = description.length > 140 ? description.slice(0, 140) + `...` : description;
+  const shortDescription = description.length > 140 ? description.slice(0, 139) + `…` : description;
   const formattedRuntime = moment(runtime * msInMin).format(`H[h] m[m]`);
   return (
     `<article class="film-card">
