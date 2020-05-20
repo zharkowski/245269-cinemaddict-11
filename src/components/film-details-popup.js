@@ -43,7 +43,7 @@ const createEmotionsTemplate = (activeEmoji) => {
   ).join(`\n`);
 };
 
-const createFilmDetailsTemplate = (film, options) => {
+const createFilmDetailsTemplate = (film, comments, options) => {
   const {
     poster,
     ageRating,
@@ -58,7 +58,6 @@ const createFilmDetailsTemplate = (film, options) => {
     country,
     genres,
     description,
-    comments
   } = film;
   const {
     activeEmoji
@@ -174,9 +173,10 @@ const createFilmDetailsTemplate = (film, options) => {
 };
 
 export default class FilmDetailsPopup extends AbstractSmartComponent {
-  constructor(film) {
+  constructor(film, comments) {
     super();
     this._film = film;
+    this._comments = comments;
     this._activeEmoji = null;
     this._closeButtonClickHandler = null;
 
@@ -196,7 +196,7 @@ export default class FilmDetailsPopup extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._film, {activeEmoji: this._activeEmoji});
+    return createFilmDetailsTemplate(this._film, this._comments, {activeEmoji: this._activeEmoji});
   }
 
   recoveryListeners() {

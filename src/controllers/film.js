@@ -4,10 +4,11 @@ import FilmDetailsPopup from "../components/film-details-popup";
 import {KEY} from "../consts";
 
 export default class FilmController {
-  constructor(container, dataChangeHandler, viewChangeHandler) {
+  constructor(container, dataChangeHandler, viewChangeHandler, commentsModel) {
     this._container = container;
     this._dataChangeHandler = dataChangeHandler;
     this._viewChangeHandler = viewChangeHandler;
+    this._commentsModel = commentsModel;
     this._filmDetailsPopup = null;
 
     this._closePopup = this._closePopup.bind(this);
@@ -29,7 +30,7 @@ export default class FilmController {
 
   _openPopup(film) {
     this._viewChangeHandler();
-    this._filmDetailsPopup = new FilmDetailsPopup(film);
+    this._filmDetailsPopup = new FilmDetailsPopup(film, this._commentsModel.comments);
 
     const container = document.querySelector(`body`);
     render(container, this._filmDetailsPopup, RenderPosition.BEFOREEND);

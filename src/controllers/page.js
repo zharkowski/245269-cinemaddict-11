@@ -6,10 +6,14 @@ import MostCommentedBoard from "../components/most-commented-board";
 import NoData from "../components/no-data";
 import Sort, {SortType} from "../components/sort";
 import BoardsContainer from "../components/boards-container";
+// models
+import Comments from "../models/comments";
 // utils
 import {remove, render, RenderPosition} from "../utils/render";
 // controllers
 import FilmController from "./film";
+// mocks
+import generateComments from "../mocks/comment";
 
 const FIRST_SHOW_FILMS_COUNT = 5;
 const ON_BUTTON_CLICK_FILMS_COUNT = 5;
@@ -71,7 +75,11 @@ export default class PageController {
 
   _renderFilms(filmsListElement, films) {
     return films.map((film) => {
-      const filmController = new FilmController(filmsListElement, this._dataChangeHandler, this._viewChangeHandler);
+      const comments = generateComments(film.comments.length);
+      const commentsModel = new Comments();
+      commentsModel.comments = comments;
+
+      const filmController = new FilmController(filmsListElement, this._dataChangeHandler, this._viewChangeHandler, commentsModel);
       filmController.render(film);
       return filmController;
     });
