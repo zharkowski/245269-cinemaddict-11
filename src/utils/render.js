@@ -24,3 +24,15 @@ export const createElement = (template) => {
 export const remove = (component) => {
   component.getElement().remove();
 };
+
+export const replace = (newComponent, oldComponent) => {
+  const newElement = newComponent.getElement();
+  const oldElement = oldComponent.getElement();
+  const parentElement = oldComponent.getElement().parentElement;
+
+  const isElementsExist = !!(newElement && oldElement && parentElement);
+
+  if (isElementsExist && parentElement.contains(oldElement)) {
+    parentElement.replaceChild(newElement, oldElement);
+  }
+};

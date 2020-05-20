@@ -105,3 +105,17 @@ export const KEY = {
   ENTER: `Enter`,
   ESC: `Escape`
 };
+export const FilterType = {
+  ALL: `all`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`,
+};
+
+export const FilterTypeToName = {
+  all: `All movies`,
+  watchlist: `Watchlist`,
+  history: `History`,
+  favorites: `Favorites`,
+};
+

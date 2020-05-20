@@ -1,23 +1,30 @@
+import {getFilmsByFilter} from "../utils/filter";
+
 export default class Films {
   constructor() {
     this._films = null;
+    this._activeFilterType = null;
   }
 
   get films() {
+    return getFilmsByFilter(this._films, this._activeFilterType);
+  }
+
+  get allFilms() {
     return this._films;
   }
 
-  set films(films) {
+  set allFilms(films) {
     this._films = films;
   }
 
   updateFilm(id, updatedFilm) {
-    const index = this.films.findIndex((film) => film.id === id);
+    const index = this.allFilms.findIndex((film) => film.id === id);
     if (index === -1) {
       return false;
     }
 
-    this.films = [].concat(this.films.slice(0, index), updatedFilm, this.films.slice(index + 1));
+    this.allFilms = [].concat(this.allFilms.slice(0, index), updatedFilm, this.allFilms.slice(index + 1));
 
     return true;
   }
