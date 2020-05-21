@@ -28,7 +28,7 @@ export default class Films {
 
   setFilter(filterType) {
     this._activeFilterType = filterType;
-    this._callHandlers(this._dataChangeHandlers);
+    this._callHandlers(this._filterChangeHandlers);
   }
 
   setFilterChangeHandler(handler) {

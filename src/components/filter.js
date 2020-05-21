@@ -1,6 +1,8 @@
 import AbstractComponent from "./abstract-component";
 import {FilterTypeToName} from "../consts";
 
+const FILTER_HREF_PREFIX = `#`;
+
 const createFilterTemplate = (filter) => {
   const {type, count, checked} = filter;
   const name = FilterTypeToName[type];
@@ -20,6 +22,8 @@ const createFiltersTemplate = (filters) => {
   );
 };
 
+const getFilterTypeByHref = (href) => href.substring(FILTER_HREF_PREFIX.length);
+
 export default class Filter extends AbstractComponent {
   constructor(filters) {
     super();
@@ -28,5 +32,14 @@ export default class Filter extends AbstractComponent {
 
   getTemplate() {
     return createFiltersTemplate(this._filters);
+  }
+
+  setFilterChangeHandler(handler) {
+    this.getElement().querySelectorAll(`.main-navigation__item`)
+      .forEach((it) => it.addEventListener(`click`, (evt) => {
+        evt.preventDefault();
+        const filterType = getFilterTypeByHref(it.getAttribute(`href`));
+        handler(filterType);
+      }));
   }
 }
