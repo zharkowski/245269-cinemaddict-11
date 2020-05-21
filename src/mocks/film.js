@@ -44,10 +44,10 @@ const generateFilm = () => {
       description: getRandomUniqueElements(DESCRIPTION_SENTENCES, DESCRIPTION_SENTENCES_MAX_COUNT).join(` `),
     },
     userDetails: {
-      "watchlist": getRandomBoolean(),
-      "already_watched": getRandomBoolean(),
-      "watching_date": getRandomDate(releaseDate, new Date()),
-      "favorite": getRandomBoolean(),
+      watchlist: getRandomBoolean(),
+      alreadyWatched: getRandomBoolean(),
+      watchingDate: getRandomDate(releaseDate, new Date()),
+      favorite: getRandomBoolean(),
     },
   };
 };
