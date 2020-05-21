@@ -44,21 +44,10 @@ const createEmotionsTemplate = (activeEmoji) => {
 };
 
 const createFilmDetailsTemplate = (film, comments, options) => {
-  const {
-    poster,
-    ageRating,
-    title,
-    originalTitle,
-    rating,
-    director,
-    writers,
-    actors,
-    releaseDate,
-    runtime,
-    country,
-    genres,
-    description,
-  } = film;
+  const {filmInfo, userDetails} = film;
+  const {release, runtime, poster, ageRating, title, alternativeTitle, totalRating, director, writers, actors, genre, description} = filmInfo;
+  const {date: releaseDate, releaseCountry} = release;
+  const {watchlist, alreadyWatched, favorite} = userDetails;
   const {
     activeEmoji
   } = options;
@@ -75,7 +64,7 @@ const createFilmDetailsTemplate = (film, comments, options) => {
           </div>
           <div class="film-details__info-wrap">
             <div class="film-details__poster">
-              <img class="film-details__poster-img" src="./images/posters/${poster}" alt="">
+              <img class="film-details__poster-img" src="${poster}" alt="">
 
               <p class="film-details__age">${ageRating}+</p>
             </div>
@@ -84,11 +73,11 @@ const createFilmDetailsTemplate = (film, comments, options) => {
               <div class="film-details__info-head">
                 <div class="film-details__title-wrap">
                   <h3 class="film-details__title">${title}</h3>
-                  <p class="film-details__title-original">Original: ${originalTitle}</p>
+                  <p class="film-details__title-original">Original: ${alternativeTitle}</p>
                 </div>
 
                 <div class="film-details__rating">
-                  <p class="film-details__total-rating">${rating}</p>
+                  <p class="film-details__total-rating">${totalRating}</p>
                 </div>
               </div>
 
@@ -115,12 +104,12 @@ const createFilmDetailsTemplate = (film, comments, options) => {
                 </tr>
                 <tr class="film-details__row">
                   <td class="film-details__term">Country</td>
-                  <td class="film-details__cell">${country}</td>
+                  <td class="film-details__cell">${releaseCountry}</td>
                 </tr>
                 <tr class="film-details__row">
-                  <td class="film-details__term">Genre${genres.length !== 1 ? `s` : ``}</td>
+                  <td class="film-details__term">Genre${genre.length !== 1 ? `s` : ``}</td>
                   <td class="film-details__cell">
-                    ${createGenresTemplate(genres)}
+                    ${createGenresTemplate(genre)}
                 </tr>
               </table>
 
@@ -131,13 +120,13 @@ const createFilmDetailsTemplate = (film, comments, options) => {
           </div>
 
           <section class="film-details__controls">
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist">
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="watchlist" name="watchlist" ${watchlist ? `checked` : ``}>
             <label for="watchlist" class="film-details__control-label film-details__control-label--watchlist">Add to watchlist</label>
 
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched">
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="watched" name="watched" ${alreadyWatched ? `checked` : ``}>
             <label for="watched" class="film-details__control-label film-details__control-label--watched">Already watched</label>
 
-            <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite">
+            <input type="checkbox" class="film-details__control-input visually-hidden" id="favorite" name="favorite" ${favorite ? `checked` : ``}>
             <label for="favorite" class="film-details__control-label film-details__control-label--favorite">Add to favorites</label>
           </section>
         </div>
