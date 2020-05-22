@@ -1,4 +1,4 @@
-import Film from "../components/film";
+import FilmComponent from "../components/film";
 import {remove, render, RenderPosition} from "../utils/render";
 import FilmDetailsPopup from "../components/film-details-popup";
 import {KEY} from "../consts";
@@ -9,15 +9,16 @@ export default class FilmController {
     this._dataChangeHandler = dataChangeHandler;
     this._viewChangeHandler = viewChangeHandler;
     this._commentsModel = commentsModel;
-    this._filmDetailsPopup = null;
+    this._filmComponent = null;
+    this._filmDetailsPopupComponent = null;
 
     this._closePopup = this._closePopup.bind(this);
     this._closePopupKeydownHandler = this._closePopupKeydownHandler.bind(this);
   }
 
   _closePopup() {
-    if (this._filmDetailsPopup) {
-      remove(this._filmDetailsPopup);
+    if (this._filmDetailsPopupComponent) {
+      remove(this._filmDetailsPopupComponent);
     }
     document.removeEventListener(`keydown`, this._closePopupKeydownHandler);
   }
@@ -30,11 +31,11 @@ export default class FilmController {
 
   _openPopup(film) {
     this._viewChangeHandler();
-    this._filmDetailsPopup = new FilmDetailsPopup(film, this._commentsModel.comments);
+    this._filmDetailsPopupComponent = new FilmDetailsPopup(film, this._commentsModel.comments);
 
     const container = document.querySelector(`body`);
-    render(container, this._filmDetailsPopup, RenderPosition.BEFOREEND);
-    this._filmDetailsPopup.setCloseButtonClickHandler(this._closePopup);
+    render(container, this._filmDetailsPopupComponent, RenderPosition.BEFOREEND);
+    this._filmDetailsPopupComponent.setCloseButtonClickHandler(this._closePopup);
     document.addEventListener(`keydown`, this._closePopupKeydownHandler);
   }
 
@@ -42,8 +43,13 @@ export default class FilmController {
     this._closePopup();
   }
 
+  destroy() {
+    remove(this._filmComponent);
+  }
+
   render(film) {
-    const filmComponent = new Film(film);
+    this._filmComponent = new FilmComponent(film);
+    const filmComponent = this._filmComponent;
     filmComponent.setLinksToPopupClickHandlers(() => {
       this._openPopup(film);
     });
