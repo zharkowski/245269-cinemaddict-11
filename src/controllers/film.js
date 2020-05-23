@@ -4,15 +4,8 @@ import FilmDetailsPopup from "../components/film-details-popup";
 import {KEY} from "../consts";
 import assignment from "assignment";
 
-export const Mode = {
-  DEFAULT: `default`,
-  DETAILS: `details`,
-  COMMENT: `comment`
-};
-
 export default class FilmController {
   constructor(container, dataChangeHandler, viewChangeHandler, commentsModel) {
-    this._mode = Mode.DEFAULT;
     this._container = container;
     this._dataChangeHandler = dataChangeHandler;
     this._viewChangeHandler = viewChangeHandler;
@@ -29,7 +22,6 @@ export default class FilmController {
       remove(this._filmDetailsPopupComponent);
     }
     document.removeEventListener(`keydown`, this._closePopupKeydownHandler);
-    this._mode = Mode.DEFAULT;
   }
 
   _closePopupKeydownHandler(evt) {
@@ -43,15 +35,11 @@ export default class FilmController {
 
     const container = document.querySelector(`body`);
     render(container, this._filmDetailsPopupComponent, RenderPosition.BEFOREEND);
-    // this._filmDetailsPopupComponent.setCloseButtonClickHandler(this._closePopup);
     document.addEventListener(`keydown`, this._closePopupKeydownHandler);
-    this._mode = Mode.DETAILS;
   }
 
   setDefaultView() {
-    if (this._mode !== Mode.DEFAULT) {
-      this._closePopup();
-    }
+    this._closePopup();
   }
 
   destroy() {
@@ -60,10 +48,9 @@ export default class FilmController {
     document.removeEventListener(`click`, this._closePopupKeydownHandler);
   }
 
-  render(film, mode) {
+  render(film) {
     const oldFilmComponent = this._filmComponent;
     const oldFilmDetailsComponent = this._filmDetailsPopupComponent;
-    this._mode = mode;
 
     this._filmComponent = new FilmComponent(film);
     this._filmDetailsPopupComponent = new FilmDetailsPopup(film, this._commentsModel.comments);

@@ -11,7 +11,7 @@ import Comments from "../models/comments";
 // utils
 import {remove, render, RenderPosition} from "../utils/render";
 // controllers
-import FilmController, {Mode} from "./film";
+import FilmController from "./film";
 // mocks
 import generateComments from "../mocks/comment";
 
@@ -46,7 +46,7 @@ const renderFilms = (filmsListElement, films, dataChangeHandler, viewChangeHandl
     commentsModel.comments = comments;
 
     const filmController = new FilmController(filmsListElement, dataChangeHandler, viewChangeHandler, commentsModel);
-    filmController.render(film, Mode.DEFAULT);
+    filmController.render(film);
     return filmController;
   });
 };
@@ -85,7 +85,7 @@ export default class PageController {
     const isSuccess = this._filmsModel.updateFilm(oldFilm.id, newFilm);
 
     if (isSuccess) {
-      filmController.render(newFilm, Mode.DEFAULT);
+      filmController.render(newFilm);
     }
   }
 
