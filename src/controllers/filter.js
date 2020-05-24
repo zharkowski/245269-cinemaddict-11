@@ -21,6 +21,7 @@ export default class FilterController {
     this._activeFilterType = filterType;
     this._filmsModel.setFilter(filterType);
     this.render();
+    this._filmsModel.setDefaultSortType();
   }
 
   _dataChangeHandler() {

@@ -32,4 +32,22 @@ export default class Comments {
 
     return true;
   }
+
+  removeComment(id) {
+    this.updateComment(id, []);
+    const index = this.comments.findIndex((comment) => comment.id === id);
+    if (index === -1) {
+      return false;
+    }
+
+    this.comments = [].concat(this.comments.slice(0, index), this.comments.slice(index + 1));
+    this._callHandlers(this._dataChangeHandlers);
+
+    return true;
+  }
+
+  addComment(comment) {
+    this.comments = [].concat(comment, this.comments);
+    this._callHandlers(this._dataChangeHandlers);
+  }
 }

@@ -39,6 +39,19 @@ export default class Films {
     this._dataChangeHandlers.push(handler);
   }
 
+  removeComment(id) {
+    const film = this.films.find((it) => it.comments.includes(id));
+    if (!film) {
+      return false;
+    }
+    const index = film.comments.findIndex((comment) => comment === id);
+    if (index === -1) {
+      return false;
+    }
+    film.comments = [].concat(film.comments.slice(0, index), film.comments.slice(index + 1));
+    return film.comments;
+  }
+
   updateFilm(id, updatedFilm) {
     const index = this.allFilms.findIndex((film) => film.id === id);
     if (index === -1) {

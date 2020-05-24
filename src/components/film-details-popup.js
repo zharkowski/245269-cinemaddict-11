@@ -6,30 +6,6 @@ const createGenresTemplate = (genres) => {
   return genres.map((genre) => `<span class="film-details__genre">${genre}</span>`).join(`\n`);
 };
 
-const createCommentTemplate = (comment) => {
-  const {text, emotion, author, date} = comment;
-  const formattedDate = moment(date).fromNow();
-  return (
-    `<li class="film-details__comment">
-      <span class="film-details__comment-emoji">
-        <img src="./images/emoji/${emotion}.png" width="55" height="55" alt="emoji-smile">
-      </span>
-      <div>
-        <p class="film-details__comment-text">${text}</p>
-        <p class="film-details__comment-info">
-          <span class="film-details__comment-author">${author}</span>
-          <span class="film-details__comment-day">${formattedDate}</span>
-          <button class="film-details__comment-delete">Delete</button>
-        </p>
-      </div>
-    </li>`
-  );
-};
-
-const createCommentsTemplate = (comments) => {
-  return comments.map((comment) => createCommentTemplate(comment)).join(`\n`);
-};
-
 const createEmotionsTemplate = (activeEmoji) => {
   return EMOTIONS.map(
       (emotion) => {
@@ -43,8 +19,8 @@ const createEmotionsTemplate = (activeEmoji) => {
   ).join(`\n`);
 };
 
-const createFilmDetailsTemplate = (film, comments, options) => {
-  const {filmInfo, userDetails} = film;
+const createFilmDetailsTemplate = (film, options) => {
+  const {comments, filmInfo, userDetails} = film;
   const {release, runtime, poster, ageRating, title, alternativeTitle, totalRating, director, writers, actors, genre, description} = filmInfo;
   const {date: releaseDate, releaseCountry} = release;
   const {watchlist, alreadyWatched, favorite} = userDetails;
@@ -137,9 +113,7 @@ const createFilmDetailsTemplate = (film, comments, options) => {
               <span class="film-details__comments-count">${comments.length}</span>
             </h3>
 
-            <ul class="film-details__comments-list">
-              ${createCommentsTemplate(comments)}
-            </ul>
+            <ul class="film-details__comments-list"></ul>
 
             <div class="film-details__new-comment">
               <div for="add-emoji" class="film-details__add-emoji-label">
@@ -162,10 +136,9 @@ const createFilmDetailsTemplate = (film, comments, options) => {
 };
 
 export default class FilmDetailsPopup extends AbstractSmartComponent {
-  constructor(film, comments) {
+  constructor(film) {
     super();
     this._film = film;
-    this._comments = comments;
     this._activeEmoji = null;
     this._closeButtonClickHandler = null;
 
@@ -185,7 +158,7 @@ export default class FilmDetailsPopup extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createFilmDetailsTemplate(this._film, this._comments, {activeEmoji: this._activeEmoji});
+    return createFilmDetailsTemplate(this._film, {activeEmoji: this._activeEmoji});
   }
 
   recoveryListeners() {
@@ -193,20 +166,20 @@ export default class FilmDetailsPopup extends AbstractSmartComponent {
     this._subscribeOnEvents();
   }
 
-  setCloseButtonClickHandler(cb) {
-    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, cb);
-    this._closeButtonClickHandler = cb;
+  setCloseButtonClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, handler);
+    this._closeButtonClickHandler = handler;
   }
 
-  setAddToWatchlistClickHandler(cb) {
-    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, cb);
+  setAddToWatchlistClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__control-label--watchlist`).addEventListener(`click`, handler);
   }
 
-  setMarkAsWatchedClickHandler(cb) {
-    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, cb);
+  setMarkAsWatchedClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__control-label--watched`).addEventListener(`click`, handler);
   }
 
-  setFavoriteClickHandler(cb) {
-    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, cb);
+  setFavoriteClickHandler(handler) {
+    this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, handler);
   }
 }
