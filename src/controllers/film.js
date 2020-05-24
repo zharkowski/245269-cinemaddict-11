@@ -99,6 +99,7 @@ export default class FilmController {
 
     const addToWatchClickHandler = () => {
       this._dataChangeHandler(this, film, assignment({}, film, {userDetails: {watchlist: !film.userDetails.watchlist}}));
+      this._renderComments(this._commentsModel.comments);
     };
 
     const markAsWatchedClickHandler = () => {
@@ -108,10 +109,12 @@ export default class FilmController {
           watchingDate: new Date(),
         }
       }));
+      this._renderComments(this._commentsModel.comments);
     };
 
     const favoriteClickHandler = () => {
       this._dataChangeHandler(this, film, assignment({}, film, {userDetails: {favorite: !film.userDetails.favorite}}));
+      this._renderComments(this._commentsModel.comments);
     };
 
     filmComponent.setAddToWatchlistClickHandler(addToWatchClickHandler);
