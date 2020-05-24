@@ -21,9 +21,9 @@ export default class FilmController {
     this._filmDetailsPopupComponent = null;
     this._commentsControllers = [];
 
+    this._commentsChangeHandler = this._commentsChangeHandler.bind(this);
     this._closePopup = this._closePopup.bind(this);
     this._closePopupKeydownHandler = this._closePopupKeydownHandler.bind(this);
-    // this._commentDataChangeHandler = this._commentDataChangeHandler.bind(this);
   }
 
   _closePopup() {
@@ -41,23 +41,27 @@ export default class FilmController {
     }
   }
 
-  _renderComments() {
+  _removeController(controller) {
+    const index = this._commentsControllers.indexOf(controller);
+    this._commentsControllers = [].concat(this._commentsControllers.slice(0, index), this._commentsControllers.slice(index + 1));
+  }
+
+  _commentsChangeHandler(commentController, oldData, newData) {
+    if (newData === null) {
+      this._removeController(commentController);
+      this._commentsModel.removeComment(oldData.id);
+      this._commentsDataChangeHandler(this, oldData, newData);
+      this._renderComments(this._commentsModel.comments);
+    }
+  }
+
+  _renderComments(comments) {
     const commentsContainer = this._filmDetailsPopupComponent.getElement().querySelector(`.film-details__comments-list`);
-    this._commentsControllers = this._commentsModel.comments.map((comment) => {
-      const commentController = new CommentsController(commentsContainer, this._commentsModel, this._commentsDataChangeHandler);
+    this._commentsControllers = comments.map((comment) => {
+      const commentController = new CommentsController(commentsContainer, this._commentsModel, this._commentsChangeHandler);
       commentController.render(comment);
       return commentController;
     });
-  }
-
-  _removeComments() {
-    this._commentsControllers.forEach((taskController) => taskController.destroy());
-    this._commentsControllers = [];
-  }
-
-  _updateComments() {
-    this._removeComments();
-    this._renderComments();
   }
 
   _openPopup() {
@@ -67,7 +71,7 @@ export default class FilmController {
     render(container, this._filmDetailsPopupComponent, RenderPosition.BEFOREEND);
     document.addEventListener(`keydown`, this._closePopupKeydownHandler);
 
-    this._renderComments();
+    this._renderComments(this._commentsModel.comments);
   }
 
   setDefaultView() {

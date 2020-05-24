@@ -27,11 +27,10 @@ export default class CommentsController {
 
     const deleteClickHandler = (evt) => {
       evt.preventDefault();
-      this._commentDataChangeHandler(comment, null);
+      this._commentDataChangeHandler(this, comment, null);
     };
 
     commentComponent.setDeleteButtonClickHandler(deleteClickHandler);
-
     if (oldCommentComponent) {
       replace(commentComponent, oldCommentComponent);
     } else {
