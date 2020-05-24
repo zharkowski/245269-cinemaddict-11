@@ -87,10 +87,9 @@ export default class PageController {
     }
   }
 
-  _commentsDataChangeHandler(commentController, commentsModel, oldData, newData) {
+  _commentsDataChangeHandler(oldData, newData) {
     if (newData === null) {
       this._filmsModel.removeComment(oldData.id);
-      // commentsModel.removeComment(oldData.id);
       this._updateFilms(this._showingFilmsCount);
     }
   }
