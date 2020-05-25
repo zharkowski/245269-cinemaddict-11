@@ -22,8 +22,6 @@ export default class FilmController {
     this._commentsControllers = [];
 
     this._commentsChangeHandler = this._commentsChangeHandler.bind(this);
-    this._closePopup = this._closePopup.bind(this);
-    this._closePopupKeydownHandler = this._closePopupKeydownHandler.bind(this);
   }
 
   _closePopup() {
@@ -33,6 +31,7 @@ export default class FilmController {
       remove(this._filmDetailsPopupComponent);
     }
     document.removeEventListener(`keydown`, this._closePopupKeydownHandler);
+    document.removeEventListener(`keydown`, this._sendCommentKeydownHandler);
   }
 
   _closePopupKeydownHandler(evt) {
@@ -46,12 +45,22 @@ export default class FilmController {
     this._commentsControllers = [].concat(this._commentsControllers.slice(0, index), this._commentsControllers.slice(index + 1));
   }
 
+  // _createComment(commentsComponent) {
+  //   this._creatingComment = new CommentsController(commentsComponent, this._commentsModel, this._commentsChangeHandler);
+  //   this._creatingTask.render(EmptyTask, TaskControllerMode.ADDING);
+  //
+  //
+  // }
+
   _commentsChangeHandler(commentController, oldData, newData) {
     if (newData === null) {
       this._removeController(commentController);
       this._commentsModel.removeComment(oldData.id);
       this._commentsDataChangeHandler(this, oldData, newData);
       this._renderComments(this._commentsModel.comments);
+    }
+    if (oldData === null) {
+      //
     }
   }
 
@@ -64,12 +73,20 @@ export default class FilmController {
     });
   }
 
+  _sendCommentKeydownHandler(evt) {
+    if (evt.key === KEY.ENTER || (evt[KEY.LEFT_COMMAND] || evt[KEY.LEFT_COMMAND] || evt[KEY.RIGHT_COMMAND]
+        || evt[KEY.LEFT_CTRL] || evt[KEY.RIGHT_CTRL])) {
+      //
+    }
+  }
+
   _openPopup() {
     this._viewChangeHandler();
 
     const container = document.querySelector(`body`);
     render(container, this._filmDetailsPopupComponent, RenderPosition.BEFOREEND);
     document.addEventListener(`keydown`, this._closePopupKeydownHandler);
+    document.addEventListener(`keydown`, this._sendCommentKeydownHandler);
 
     this._renderComments(this._commentsModel.comments);
   }

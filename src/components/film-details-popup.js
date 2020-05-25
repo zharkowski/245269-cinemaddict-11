@@ -153,6 +153,7 @@ export default class FilmDetailsPopup extends AbstractSmartComponent {
       button.addEventListener(`click`, () => {
         this._activeEmoji = button.value;
         this.rerender();
+
       });
     });
   }
@@ -181,5 +182,9 @@ export default class FilmDetailsPopup extends AbstractSmartComponent {
 
   setFavoriteClickHandler(handler) {
     this.getElement().querySelector(`.film-details__control-label--favorite`).addEventListener(`click`, handler);
+  }
+
+  setCommentSendHandler(handler) {
+    document.addEventListener(`keydown`, handler);
   }
 }

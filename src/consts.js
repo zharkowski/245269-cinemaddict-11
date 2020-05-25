@@ -103,7 +103,11 @@ export const DESCRIPTION_SENTENCES = [
 export const EMOTIONS = [`smile`, `sleeping`, `puke`, `angry`];
 export const KEY = {
   ENTER: `Enter`,
-  ESC: `Escape`
+  ESC: `Escape`,
+  LEFT_CTRL: `ControlLeft`,
+  RIGHT_CTRL: `ControlRight`,
+  LEFT_COMMAND: `MetaLeft`,
+  RIGHT_COMMAND: `MetaRight`,
 };
 export const FilterType = {
   ALL: `all`,

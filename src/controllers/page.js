@@ -96,6 +96,9 @@ export default class PageController {
         filmController.render(oldFilm);
       }
     }
+    if (oldData === null) {
+      // this._filmsModel
+    }
   }
 
   _showMoreButtonClickHandler() {

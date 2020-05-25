@@ -39,6 +39,10 @@ export default class Films {
     this._dataChangeHandlers.push(handler);
   }
 
+  addComment(film, commentID) {
+    film.comments = [].concat(film.comments, commentID);
+  }
+
   removeComment(id) {
     const film = this.films.find((it) => it.comments.includes(id));
     if (!film) {
