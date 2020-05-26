@@ -9,21 +9,11 @@ export const EmptyComment = {
 };
 
 export default class CommentsController {
-  constructor(container, commentsModel, commentDataChangeHandler) {
+  constructor(container, commentDataChangeHandler) {
     this._container = container;
-    this._commentsModel = commentsModel;
     this._commentDataChangeHandler = commentDataChangeHandler;
 
-    this._commentComponent = null;
-  }
-
-  removeComment(id) {
-    this._commentsModel.removeComment(id);
-    remove(this._commentComponent);
-  }
-
-  destroy() {
-    remove(this._commentComponent);
+    this._IdToCommentComponent = {};
   }
 
   // const newCommentKeydownHandler = (evt) => {
@@ -39,22 +29,33 @@ export default class CommentsController {
     this._commentDataChangeHandler(this, null, assignment({}, localComment, {id: commentId, author: ``}));
   }
 
-  render(comment) {
-    const oldCommentComponent = this._commentComponent;
+  _renderComment(comment) {
+    const oldCommentComponent = this._IdToCommentComponent[comment.id];
 
-    this._commentComponent = new CommentComponent(comment);
-    const commentComponent = this._commentComponent;
+    const commentComponent = new CommentComponent(comment);
+    this._IdToCommentComponent[comment.id] = commentComponent;
 
     const deleteClickHandler = (evt) => {
       evt.preventDefault();
       this._commentDataChangeHandler(this, comment, null);
     };
-
     commentComponent.setDeleteButtonClickHandler(deleteClickHandler);
+
     if (oldCommentComponent) {
       replace(commentComponent, oldCommentComponent);
     } else {
       render(this._container, commentComponent, RenderPosition.BEFOREEND);
     }
+  }
+
+  destroy(comment) {
+    if (this._IdToCommentComponent[comment.id]) {
+      remove(this._IdToCommentComponent[comment.id]);
+    }
+    // comments.forEach((comment) => remove(this._IdToCommentComponent[comment.id]));
+  }
+
+  render(comments) {
+    comments.forEach((comment) => this._renderComment(comment));
   }
 }

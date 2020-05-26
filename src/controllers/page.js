@@ -89,12 +89,12 @@ export default class PageController {
 
   _commentsDataChangeHandler(filmController, oldData, newData) {
     if (newData === null) {
-      const oldFilm = this._filmsModel.films.find((film) => film.comments.includes(oldData.id));
-      const isSuccess = this._filmsModel.removeComment(oldData.id);
-
-      if (isSuccess) {
-        filmController.render(oldFilm);
-      }
+      // const oldFilm = this._filmsModel.films.find((film) => film.comments.includes(oldData.id));
+      // const isSuccess = this._filmsModel.removeComment(oldData.id);
+      //
+      // if (isSuccess) {
+      //   filmController.render(oldFilm);
+      // }
     }
     if (oldData === null) {
       // this._filmsModel
