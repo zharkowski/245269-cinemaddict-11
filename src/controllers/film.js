@@ -1,6 +1,7 @@
 // components
 import FilmComponent from "../components/film";
 import FilmDetailsPopup from "../components/film-details-popup";
+import PopupCommentsCount from "../components/popup-comments-count";
 // controllers
 import CommentsController from "./comments";
 // consts
@@ -24,6 +25,7 @@ export default class FilmController {
 
     this._filmComponent = null;
     this._filmDetailsPopupComponent = null;
+    this._popupCommentsCountComponent = null;
 
     this._commentsController = null;
 
@@ -53,6 +55,7 @@ export default class FilmController {
     if (oldData === null) {
       //
     }
+    this._renderCommentsCount();
   }
 
   _sendCommentKeydownHandler(evt) {
@@ -62,12 +65,25 @@ export default class FilmController {
     }
   }
 
+  _renderCommentsCount() {
+    const oldCommentsCountComponent = this._popupCommentsCountComponent;
+    this._popupCommentsCountComponent = new PopupCommentsCount(this._commentsModel.comments.length);
+    const commentsCountContainer = this._filmDetailsPopupComponent.getElement().querySelector(`.film-details__comments-wrap`);
+    if (oldCommentsCountComponent) {
+      replace(this._popupCommentsCountComponent, oldCommentsCountComponent);
+    } else {
+      render(commentsCountContainer, this._popupCommentsCountComponent, RenderPosition.AFTERBEGIN);
+    }
+  }
+
   _openPopup() {
     this._viewChangeHandler();
 
     const container = document.querySelector(`body`);
     render(container, this._filmDetailsPopupComponent, RenderPosition.BEFOREEND);
     document.addEventListener(`keydown`, this._closePopupKeydownHandler);
+
+    this._renderCommentsCount();
 
     this._commentsController.render(this._commentsModel.comments);
 

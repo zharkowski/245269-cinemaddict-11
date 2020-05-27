@@ -20,7 +20,7 @@ const createEmotionsTemplate = (activeEmoji) => {
 };
 
 const createFilmDetailsTemplate = (film, options) => {
-  const {comments, filmInfo, userDetails} = film;
+  const {filmInfo, userDetails} = film;
   const {release, runtime, poster, ageRating, title, alternativeTitle, totalRating, director, writers, actors, genre, description} = filmInfo;
   const {date: releaseDate, releaseCountry} = release;
   const {watchlist, alreadyWatched, favorite} = userDetails;
@@ -109,10 +109,6 @@ const createFilmDetailsTemplate = (film, options) => {
 
         <div class="form-details__bottom-container">
           <section class="film-details__comments-wrap">
-            <h3 class="film-details__comments-title">Comment${comments.length !== 1 ? `s` : ``}
-              <span class="film-details__comments-count">${comments.length}</span>
-            </h3>
-
             <ul class="film-details__comments-list"></ul>
 
             <div class="film-details__new-comment">
