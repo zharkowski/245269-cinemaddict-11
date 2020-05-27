@@ -9,8 +9,9 @@ export const EmptyComment = {
 };
 
 export default class CommentsController {
-  constructor(container, commentDataChangeHandler) {
+  constructor(container, commentsModel, commentDataChangeHandler) {
     this._container = container;
+    this._commentsModel = commentsModel;
     this._commentDataChangeHandler = commentDataChangeHandler;
 
     this._IdToCommentComponent = {};
@@ -46,6 +47,12 @@ export default class CommentsController {
     } else {
       render(this._container, commentComponent, RenderPosition.BEFOREEND);
     }
+  }
+
+  removeComment(id) {
+    this._commentsModel.removeComment(id);
+    const commentComponent = this._IdToCommentComponent[id];
+    remove(commentComponent);
   }
 
   destroy(comment) {

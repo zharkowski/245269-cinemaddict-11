@@ -15,12 +15,11 @@ export const Mode = {
 };
 
 export default class FilmController {
-  constructor(container, commentsModel, dataChangeHandler, viewChangeHandler, commentsDataChangeHandler) {
+  constructor(container, commentsModel, dataChangeHandler, viewChangeHandler) {
     this._container = container;
     this._commentsModel = commentsModel;
     this._dataChangeHandler = dataChangeHandler;
     this._viewChangeHandler = viewChangeHandler;
-    this._commentsDataChangeHandler = commentsDataChangeHandler;
     this._mode = Mode.DEFAULT;
 
     this._filmComponent = null;
@@ -49,9 +48,7 @@ export default class FilmController {
 
   _commentsChangeHandler(commentController, oldData, newData) {
     if (newData === null) {
-      this._commentsModel.removeComment(oldData.id);
-      this._commentsDataChangeHandler(this, oldData, newData);
-      this._commentsController.render(this._commentsModel.comments);
+      this._commentsController.removeComment(oldData.id);
     }
     if (oldData === null) {
       //
@@ -100,7 +97,7 @@ export default class FilmController {
     const filmDetailsComponent = this._filmDetailsPopupComponent;
 
     const commentsContainer = this._filmDetailsPopupComponent.getElement().querySelector(`.film-details__comments-list`);
-    this._commentsController = new CommentsController(commentsContainer, this._commentsChangeHandler);
+    this._commentsController = new CommentsController(commentsContainer, this._commentsModel, this._commentsChangeHandler);
 
     filmComponent.setLinksToPopupClickHandlers(() => {
       this._openPopup();
@@ -135,6 +132,7 @@ export default class FilmController {
     if (oldFilmComponent && oldFilmDetailsComponent) {
       replace(filmComponent, oldFilmComponent);
       replace(filmDetailsComponent, oldFilmDetailsComponent);
+      this._commentsController.render(this._commentsModel.comments);
     } else {
       render(this._container, filmComponent, RenderPosition.BEFOREEND);
     }

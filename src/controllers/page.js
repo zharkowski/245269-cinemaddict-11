@@ -37,12 +37,12 @@ const getSortedFilms = (films, sortType, from, to) => {
   return sortedFilms.slice(from, to);
 };
 
-const renderFilms = (filmsListElement, films, dataChangeHandler, viewChangeHandler, commentsDataChangeHandler) => {
+const renderFilms = (filmsListElement, films, dataChangeHandler, viewChangeHandler) => {
   return films.map((film) => {
     const comments = generateComments(film.comments);
     const commentsModel = new CommentsModel();
     commentsModel.comments = comments;
-    const filmController = new FilmController(filmsListElement, commentsModel, dataChangeHandler, viewChangeHandler, commentsDataChangeHandler);
+    const filmController = new FilmController(filmsListElement, commentsModel, dataChangeHandler, viewChangeHandler);
     filmController.render(film);
     return filmController;
   });
@@ -66,7 +66,6 @@ export default class PageController {
 
     this._detailsDataChangeHandler = this._detailsDataChangeHandler.bind(this);
     this._viewChangeHandler = this._viewChangeHandler.bind(this);
-    this._commentsDataChangeHandler = this._commentsDataChangeHandler.bind(this);
     this._showMoreButtonClickHandler = this._showMoreButtonClickHandler.bind(this);
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
     this._filterChangeHandler = this._filterChangeHandler.bind(this);
@@ -87,19 +86,20 @@ export default class PageController {
     }
   }
 
-  _commentsDataChangeHandler(filmController, oldData, newData) {
-    if (newData === null) {
-      // const oldFilm = this._filmsModel.films.find((film) => film.comments.includes(oldData.id));
-      // const isSuccess = this._filmsModel.removeComment(oldData.id);
-      //
-      // if (isSuccess) {
-      //   filmController.render(oldFilm);
-      // }
-    }
-    if (oldData === null) {
-      // this._filmsModel
-    }
-  }
+  // _commentsDataChangeHandler(filmController, oldData, newData) {
+  //   if (newData === null) {
+  //     console.log(`delete jija`);
+  //     // const oldFilm = this._filmsModel.films.find((film) => film.comments.includes(oldData.id));
+  //     // const isSuccess = this._filmsModel.removeComment(oldData.id);
+  //     //
+  //     // if (isSuccess) {
+  //     //   filmController.render(oldFilm);
+  //     // }
+  //   }
+  //   if (oldData === null) {
+  //     // this._filmsModel
+  //   }
+  // }
 
   _showMoreButtonClickHandler() {
     const prevFilmsCount = this._showingFilmsCount;
@@ -137,7 +137,7 @@ export default class PageController {
     render(boardsContainerElement, topRatedBoardComponent, RenderPosition.BEFOREEND);
     const filmsListContainerElement = topRatedBoardComponent.getElement().querySelector(`.films-list__container`);
     const topRatedFilms = getSortedFilms(films, SortType.RATING, 0, TOP_RATED_FILMS_COUNT);
-    renderFilms(filmsListContainerElement, topRatedFilms, this._detailsDataChangeHandler, this._viewChangeHandler, this._commentsDataChangeHandler);
+    renderFilms(filmsListContainerElement, topRatedFilms, this._detailsDataChangeHandler, this._viewChangeHandler);
   }
 
   _renderMostCommentedBoard(boardsContainerElement, films) {
@@ -145,7 +145,7 @@ export default class PageController {
     render(boardsContainerElement, mostCommentedBoardComponent, RenderPosition.BEFOREEND);
     const filmsListContainerElement = mostCommentedBoardComponent.getElement().querySelector(`.films-list__container`);
     const mostCommentedFilms = films.slice().sort((a, b) => b.comments.length - a.comments.length).slice(0, MOST_COMMENT_FILMS_COUNT);
-    renderFilms(filmsListContainerElement, mostCommentedFilms, this._detailsDataChangeHandler, this._viewChangeHandler, this._commentsDataChangeHandler);
+    renderFilms(filmsListContainerElement, mostCommentedFilms, this._detailsDataChangeHandler, this._viewChangeHandler);
   }
 
   _sortTypeChangeHandler(sortType) {
@@ -163,7 +163,7 @@ export default class PageController {
 
   _renderFilms(films) {
     const filmListElement = this._filmsBoardComponent.getElement().querySelector(`.films-list__container`);
-    const newFilms = renderFilms(filmListElement, films, this._detailsDataChangeHandler, this._viewChangeHandler, this._commentsDataChangeHandler);
+    const newFilms = renderFilms(filmListElement, films, this._detailsDataChangeHandler, this._viewChangeHandler);
     this._showingFilmsControllers = this._showingFilmsControllers.concat(newFilms);
     this._showingFilmsCount = this._showingFilmsControllers.length;
   }
