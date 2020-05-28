@@ -12,4 +12,15 @@ export default class Navigation extends AbstractComponent {
   getTemplate() {
     return createNavigationTemplate();
   }
+
+  setChangeHandler(handler) {
+    this.getElement().addEventListener(`click`, (evt) => {
+      if (evt.target.tagName !== `A`) {
+        return;
+      }
+
+      const menuItem = evt.target.getAttribute(`href`).slice(1);
+      handler(menuItem);
+    });
+  }
 }

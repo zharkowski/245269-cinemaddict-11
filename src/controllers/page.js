@@ -198,14 +198,16 @@ export default class PageController {
   }
 
   hide() {
-    if (this._container.getElement()) {
-      this._container.getElement().classList.add(`visually-hidden`);
+    if (this._sortComponent && this._boardsContainer) {
+      this._sortComponent.hide();
+      this._boardsContainer.hide();
     }
   }
 
   show() {
-    if (this._container.getElement()) {
-      this._container.getElement().classList.remove(`visually-hidden`);
+    if (this._sortComponent && this._boardsContainer) {
+      this._sortComponent.show();
+      this._boardsContainer.show();
     }
   }
 }

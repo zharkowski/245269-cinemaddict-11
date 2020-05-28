@@ -12,6 +12,8 @@ import Films from "./models/films";
 import generateFilms from './mocks/film';
 // utils
 import {render, RenderPosition} from "./utils/render";
+// consts
+import {MenuItem} from "./consts";
 
 const FILMS_COUNT = 17;
 
@@ -36,6 +38,32 @@ pageController.render();
 
 const statisticComponent = new Statistic();
 render(mainElement, statisticComponent, RenderPosition.BEFOREEND);
+statisticComponent.hide();
+
+navigationComponent.setChangeHandler((menuItem) => {
+  switch (menuItem) {
+    case MenuItem.ALL_MOVIES:
+      statisticComponent.hide();
+      pageController.show();
+      break;
+    case MenuItem.WATCHLIST:
+      statisticComponent.hide();
+      pageController.show();
+      break;
+    case MenuItem.HISTORY:
+      statisticComponent.hide();
+      pageController.show();
+      break;
+    case MenuItem.FAVORITES:
+      statisticComponent.hide();
+      pageController.show();
+      break;
+    case MenuItem.STATISTIC:
+      pageController.hide();
+      statisticComponent.show();
+      break;
+  }
+});
 
 const footerStatistic = headerFooter.querySelector(`.footer__statistics`);
 render(footerStatistic, new FilmAmount(films.length), RenderPosition.BEFOREEND);

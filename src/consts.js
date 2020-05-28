@@ -115,11 +115,16 @@ export const FilterType = {
   HISTORY: `history`,
   FAVORITES: `favorites`,
 };
-
 export const FilterTypeToName = {
   all: `All movies`,
   watchlist: `Watchlist`,
   history: `History`,
   favorites: `Favorites`,
 };
-
+export const MenuItem = {
+  ALL_MOVIES: `all`,
+  WATCHLIST: `watchlist`,
+  HISTORY: `history`,
+  FAVORITES: `favorites`,
+  STATISTIC: `stats`,
+};

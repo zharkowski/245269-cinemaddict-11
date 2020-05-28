@@ -11,17 +11,18 @@ export default class FilterController {
     this._filterComponent = null;
     this._activeFilterType = FilterType.ALL;
 
-    this._filterChangeHandler = this._filterChangeHandler.bind(this);
+    this.filterChangeHandler = this.filterChangeHandler.bind(this);
     this._dataChangeHandler = this._dataChangeHandler.bind(this);
 
     this._filmsModel.setDateChangeHandler(this._dataChangeHandler);
   }
 
-  _filterChangeHandler(filterType) {
+  filterChangeHandler(filterType) {
     this._activeFilterType = filterType;
     this._filmsModel.setFilter(filterType);
     this.render();
-    this._filmsModel.setDefaultSortType();
+    // console.log(this._filmsModel.setDefaultSortType);
+    // this._filmsModel.setDefaultSortType();
   }
 
   _dataChangeHandler() {
@@ -42,7 +43,7 @@ export default class FilterController {
 
     const oldComponent = this._filterComponent;
     this._filterComponent = new FilterComponent(filters);
-    this._filterComponent.setFilterChangeHandler(this._filterChangeHandler);
+    this._filterComponent.setFilterChangeHandler(this.filterChangeHandler);
 
     if (oldComponent) {
       replace(this._filterComponent, oldComponent);
