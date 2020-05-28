@@ -48,7 +48,7 @@ export default class FilmController {
       remove(this._filmDetailsComponent);
     }
     this._filmDetailsComponent.removeEscKeydownHandler(this._closePopupKeydownHandler);
-    // document.removeEventListener(`keydown`, this._sendCommentKeydownHandler);
+    this._newCommentComponent.removeSendCommentKeydownHandler(this._sendCommentKeydownHandler);
   }
 
   _closePopupKeydownHandler(evt) {
@@ -67,13 +67,6 @@ export default class FilmController {
     this._renderFilmDetailsCommentsCount();
     this.renderFilmCommentsCount();
   }
-
-  // _sendCommentKeydownHandler(evt) {
-  //   if (evt.key === KEY.ENTER || (evt[KEY.LEFT_COMMAND] || evt[KEY.LEFT_COMMAND] || evt[KEY.RIGHT_COMMAND]
-  //       || evt[KEY.LEFT_CTRL] || evt[KEY.RIGHT_CTRL])) {
-  //     console.log(`jija`);
-  //   }
-  // }
 
   _getAddToWatchlistClickHandler(film) {
     return (evt) => {
@@ -153,6 +146,10 @@ export default class FilmController {
     this._filmControlsComponent.setFavoriteClickHandler(this._getFavoriteClickHandler(film));
   }
 
+  _sendCommentKeydownHandler() {
+    //
+  }
+
   renderNewComment() {
     const oldNewCommentComponent = this._newCommentComponent;
     this._newCommentComponent = new NewComment();
@@ -162,6 +159,7 @@ export default class FilmController {
       const newCommentContainer = this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`);
       render(newCommentContainer, this._newCommentComponent, RenderPosition.BEFOREEND);
     }
+    this._newCommentComponent.setSendCommentKeydownHandler(this._sendCommentKeydownHandler);
   }
 
   setDefaultView() {
@@ -191,7 +189,7 @@ export default class FilmController {
     this._commentsController.render(this._commentsModel.comments);
 
     this.renderNewComment();
-    // document.addEventListener(`keydown`, this._sendCommentKeydownHandler);
+
     this._mode = Mode.DETAILS;
   }
 

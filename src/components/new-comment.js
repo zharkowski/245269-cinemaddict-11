@@ -5,9 +5,9 @@ const createEmotionsTemplate = (activeEmoji) => {
   return EMOTIONS.map((emotion) => {
     return (
       `<input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-${emotion}" value="${emotion}" ${emotion === activeEmoji ? `checked=""` : ``}>
-        <label class="film-details__emoji-label" for="emoji-${emotion}">
-          <img src="./images/emoji/${emotion}.png" width="30" height="30" alt="emoji">
-        </label>`
+      <label class="film-details__emoji-label" for="emoji-${emotion}">
+        <img src="./images/emoji/${emotion}.png" width="30" height="30" alt="emoji">
+      </label>`
     );
   }).join(`\n`);
 };
@@ -35,6 +35,7 @@ export default class NewComment extends AbstractSmartComponent {
     super();
     this._activeEmoji = null;
     this._sendCommentKeydownHandler = null;
+    this._commentText = null;
 
     this._subscribeOnEvents();
   }
@@ -45,7 +46,11 @@ export default class NewComment extends AbstractSmartComponent {
 
   recoveryListeners() {
     this._subscribeOnEvents();
-    this.setSendCommentKeydownHandler(this._sendCommentKeydownHandler);
+  }
+
+  _setCommentText(text) {
+    this.getElement().querySelector(`.film-details__comment-input`).value = text;
+    this._commentText = text;
   }
 
   _subscribeOnEvents() {
@@ -54,19 +59,41 @@ export default class NewComment extends AbstractSmartComponent {
       button.addEventListener(`click`, () => {
         this._activeEmoji = button.value;
         this.rerender();
+        this._setCommentText(this._commentText);
       });
+    });
+
+    const textarea = this.getElement().querySelector(`.film-details__comment-input`);
+    textarea.addEventListener(`input`, () => {
+      this._commentText = textarea.value;
     });
   }
 
-  setSendCommentKeydownHandler(handler) {
-    const keydownHandler = (evt) => {
-      if (evt.key === KEY.ENTER
-        || (evt.key === KEY.LEFT_COMMAND || evt.key === KEY.RIGHT_COMMAND
-          || evt.key === KEY.LEFT_CTRL || evt.key === KEY.RIGHT_CTRL)) {
+  _getKeydownHandler(handler) {
+    return (evt) => {
+      if (evt.key === KEY.ENTER && (evt.ctrlKey || evt.metaKey) && this._commentText.length >= 1 && this._activeEmoji !== null) {
         handler();
       }
     };
+  }
+
+  setSendCommentKeydownHandler(handler) {
+    const keydownHandler = this._getKeydownHandler(handler);
     document.addEventListener(`keydown`, keydownHandler);
     this._sendCommentKeydownHandler = handler;
+  }
+
+  removeSendCommentKeydownHandler(handler) {
+    const keydownHandler = this._getKeydownHandler(handler);
+    document.removeEventListener(`keydown`, keydownHandler);
+    this._sendCommentKeydownHandler = null;
+  }
+
+  getData() {
+    return {
+      comment: this._commentText,
+      date: new Date(),
+      emotion: this._activeEmoji,
+    };
   }
 }
