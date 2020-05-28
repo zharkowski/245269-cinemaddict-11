@@ -1,7 +1,5 @@
 // components
 import CommentComponent from "../components/comment";
-// consts
-import {KEY} from "../consts";
 // utils
 import {RenderPosition, render, remove, replace} from "../utils/render";
 import assignment from "assignment";
@@ -19,14 +17,6 @@ export default class CommentsController {
     this._commentDataChangeHandler = commentDataChangeHandler;
 
     this._IdToCommentComponent = {};
-  }
-
-  _newCommentKeydownHandler(evt) {
-    if (evt.key === KEY.ENTER
-      || (evt.key === KEY.LEFT_COMMAND || evt.key === KEY.RIGHT_COMMAND
-        || evt.key === KEY.LEFT_CTRL || evt.key === KEY.RIGHT_CTRL)) {
-      //
-    }
   }
 
   _renderComment(comment) {
@@ -69,6 +59,5 @@ export default class CommentsController {
 
   render(comments) {
     comments.forEach((comment) => this._renderComment(comment));
-    document.addEventListener(`keydown`, this._newCommentKeydownHandler);
   }
 }

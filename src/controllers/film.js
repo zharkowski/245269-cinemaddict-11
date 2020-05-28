@@ -12,6 +12,7 @@ import assignment from "assignment";
 import FilmDetailsControls from "../components/film-details-controls";
 import FilmCommentsCount from "../components/film-comments-count";
 import FilmControls from "../components/film-controls";
+import NewComment from "../components/new-comment";
 
 export const Mode = {
   DEFAULT: `default`,
@@ -33,6 +34,7 @@ export default class FilmController {
     this._filmDetailsComponent = null;
     this._filmDetailsControlsComponent = null;
     this._filmDetailsCommentsCountComponent = null;
+    this._newCommentComponent = null;
 
     this._commentsController = null;
 
@@ -63,7 +65,7 @@ export default class FilmController {
       this._commentsController.addComment(newData);
     }
     this._renderFilmDetailsCommentsCount();
-    this._renderFilmCommentsCount();
+    this.renderFilmCommentsCount();
   }
 
   // _sendCommentKeydownHandler(evt) {
@@ -102,7 +104,7 @@ export default class FilmController {
     };
   }
 
-  _renderFilmCommentsCount() {
+  renderFilmCommentsCount() {
     const oldFilmCommentsCountComponent = this._filmCommentsCountComponent;
     this._filmCommentsCountComponent = new FilmCommentsCount(this._commentsModel.comments.length);
     if (oldFilmCommentsCountComponent) {
@@ -151,6 +153,17 @@ export default class FilmController {
     this._filmControlsComponent.setFavoriteClickHandler(this._getFavoriteClickHandler(film));
   }
 
+  renderNewComment() {
+    const oldNewCommentComponent = this._newCommentComponent;
+    this._newCommentComponent = new NewComment();
+    if (oldNewCommentComponent) {
+      replace(this._newCommentComponent, oldNewCommentComponent);
+    } else {
+      const newCommentContainer = this._filmDetailsComponent.getElement().querySelector(`.film-details__comments-wrap`);
+      render(newCommentContainer, this._newCommentComponent, RenderPosition.BEFOREEND);
+    }
+  }
+
   setDefaultView() {
     if (this._mode === Mode.DETAILS) {
       this._closePopup();
@@ -177,6 +190,7 @@ export default class FilmController {
 
     this._commentsController.render(this._commentsModel.comments);
 
+    this.renderNewComment();
     // document.addEventListener(`keydown`, this._sendCommentKeydownHandler);
     this._mode = Mode.DETAILS;
   }
@@ -203,13 +217,13 @@ export default class FilmController {
 
     if (oldFilmComponent && oldFilmDetailsComponent) {
       replace(filmComponent, oldFilmComponent);
-      this._renderFilmCommentsCount();
+      this.renderFilmCommentsCount();
       this.renderFilmControls(film);
       replace(filmDetailsComponent, oldFilmDetailsComponent);
       this._commentsController.render(this._commentsModel.comments);
     } else {
       render(this._container, filmComponent, RenderPosition.BEFOREEND);
-      this._renderFilmCommentsCount();
+      this.renderFilmCommentsCount();
       this.renderFilmControls(film);
     }
   }
