@@ -34,7 +34,6 @@ export default class NewComment extends AbstractSmartComponent {
   constructor() {
     super();
     this._activeEmoji = null;
-    this._sendCommentKeydownHandler = null;
     this._commentText = null;
 
     this._subscribeOnEvents();
@@ -88,13 +87,11 @@ export default class NewComment extends AbstractSmartComponent {
   setSendCommentKeydownHandler(handler) {
     const keydownHandler = this._getKeydownHandler(handler);
     document.addEventListener(`keydown`, keydownHandler);
-    this._sendCommentKeydownHandler = handler;
   }
 
   removeSendCommentKeydownHandler(handler) {
     const keydownHandler = this._getKeydownHandler(handler);
     document.removeEventListener(`keydown`, keydownHandler);
-    this._sendCommentKeydownHandler = null;
   }
 
   getData() {
