@@ -2,6 +2,7 @@
 import Profile from "./components/profile";
 import Navigation from "./components/navigation";
 import FilmAmount from "./components/films-amount-element";
+import Statistic from "./components/statistic";
 // controllers
 import FilterController from "./controllers/filter";
 import PageController from "./controllers/page";
@@ -32,6 +33,9 @@ filterController.render();
 
 const pageController = new PageController(mainElement, filmsModel);
 pageController.render();
+
+const statisticComponent = new Statistic();
+render(mainElement, statisticComponent, RenderPosition.BEFOREEND);
 
 const footerStatistic = headerFooter.querySelector(`.footer__statistics`);
 render(footerStatistic, new FilmAmount(films.length), RenderPosition.BEFOREEND);
