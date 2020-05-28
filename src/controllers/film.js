@@ -41,6 +41,7 @@ export default class FilmController {
     this._commentsChangeHandler = this._commentsChangeHandler.bind(this);
     this._closePopupKeydownHandler = this._closePopupKeydownHandler.bind(this);
     this._closePopup = this._closePopup.bind(this);
+    this._sendCommentKeydownHandler = this._sendCommentKeydownHandler.bind(this);
   }
 
   _closePopup() {
@@ -147,7 +148,7 @@ export default class FilmController {
   }
 
   _sendCommentKeydownHandler() {
-    //
+    this._commentsChangeHandler(this._commentsController, null, this._newCommentComponent.getData());
   }
 
   renderNewComment() {

@@ -71,10 +71,18 @@ export default class NewComment extends AbstractSmartComponent {
 
   _getKeydownHandler(handler) {
     return (evt) => {
-      if (evt.key === KEY.ENTER && (evt.ctrlKey || evt.metaKey) && this._commentText.length >= 1 && this._activeEmoji !== null) {
+      if (evt.key === KEY.ENTER && (evt.ctrlKey || evt.metaKey)
+        && this._commentText && this._commentText.length >= 1 && this._activeEmoji !== null) {
         handler();
+        this._reset();
       }
     };
+  }
+
+  _reset() {
+    this._activeEmoji = null;
+    this._setCommentText(null);
+    this.rerender();
   }
 
   setSendCommentKeydownHandler(handler) {
