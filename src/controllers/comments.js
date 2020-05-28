@@ -1,4 +1,8 @@
+// components
 import CommentComponent from "../components/comment";
+// consts
+import {KEY} from "../consts";
+// utils
 import {RenderPosition, render, remove, replace} from "../utils/render";
 import assignment from "assignment";
 
@@ -17,17 +21,12 @@ export default class CommentsController {
     this._IdToCommentComponent = {};
   }
 
-  // const newCommentKeydownHandler = (evt) => {
-  //   if (evt.key === KEY.ENTER
-  //     || (evt.key === KEY.LEFT_COMMAND || evt.key === KEY.RIGHT_COMMAND
-  //       || evt.key === KEY.LEFT_CTRL || evt.key === KEY.RIGHT_CTRL)) {
-  //     console.log(`qerty`);
-  //   }
-  // };
-
-  addComment(localComment) {
-    const commentId = String(new Date() + Math.random());
-    this._commentDataChangeHandler(this, null, assignment({}, localComment, {id: commentId, author: ``}));
+  _newCommentKeydownHandler(evt) {
+    if (evt.key === KEY.ENTER
+      || (evt.key === KEY.LEFT_COMMAND || evt.key === KEY.RIGHT_COMMAND
+        || evt.key === KEY.LEFT_CTRL || evt.key === KEY.RIGHT_CTRL)) {
+      //
+    }
   }
 
   _renderComment(comment) {
@@ -49,6 +48,13 @@ export default class CommentsController {
     }
   }
 
+  addComment(localComment) {
+    const commentId = String(new Date() + Math.random());
+    this._commentDataChangeHandler(this, null, assignment({}, localComment, {id: commentId, author: ``}));
+    const commentComponent = new CommentComponent(commentId);
+    render(this._container, commentComponent, RenderPosition.BEFOREEND);
+  }
+
   removeComment(id) {
     this._commentsModel.removeComment(id);
     const commentComponent = this._IdToCommentComponent[id];
@@ -59,10 +65,10 @@ export default class CommentsController {
     if (this._IdToCommentComponent[comment.id]) {
       remove(this._IdToCommentComponent[comment.id]);
     }
-    // comments.forEach((comment) => remove(this._IdToCommentComponent[comment.id]));
   }
 
   render(comments) {
     comments.forEach((comment) => this._renderComment(comment));
+    document.addEventListener(`keydown`, this._newCommentKeydownHandler);
   }
 }

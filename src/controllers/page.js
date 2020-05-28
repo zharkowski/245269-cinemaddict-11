@@ -82,24 +82,11 @@ export default class PageController {
     const isSuccess = this._filmsModel.updateFilm(oldData.id, newData);
 
     if (isSuccess) {
-      filmController.render(newData);
+      filmController.renderFilmControls(newData);
+      filmController.renderFilmDetailsControls(newData);
+      filmController.updateOpenPopupHandler(oldData, newData);
     }
   }
-
-  // _commentsDataChangeHandler(filmController, oldData, newData) {
-  //   if (newData === null) {
-  //     console.log(`delete jija`);
-  //     // const oldFilm = this._filmsModel.films.find((film) => film.comments.includes(oldData.id));
-  //     // const isSuccess = this._filmsModel.removeComment(oldData.id);
-  //     //
-  //     // if (isSuccess) {
-  //     //   filmController.render(oldFilm);
-  //     // }
-  //   }
-  //   if (oldData === null) {
-  //     // this._filmsModel
-  //   }
-  // }
 
   _showMoreButtonClickHandler() {
     const prevFilmsCount = this._showingFilmsCount;

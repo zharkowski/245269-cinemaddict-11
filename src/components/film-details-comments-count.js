@@ -8,7 +8,7 @@ const createCommentsCountTemplate = (commentsCount) => {
   );
 };
 
-export default class PopupCommentsCount extends AbstractComponent {
+export default class FilmDetailsCommentsCount extends AbstractComponent {
   constructor(commentsCount) {
     super();
     this._commentsCount = commentsCount;
