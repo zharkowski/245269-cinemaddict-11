@@ -1,6 +1,80 @@
 import AbstractSmartComponent from "./abstract-smart-component";
+// import Chart from "chart.js";
+// import ChartDataLabels from "chartjs-plugin-datalabels";
+import moment from "moment";
 
-const createStatisticTemplate = () => {
+const RangeType = {
+  ALL_TIME: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`,
+};
+
+const getAlreadyWatchedFilms = (films) => {
+  return films.filter((film) => film.userDetails.alreadyWatched);
+};
+
+const getFilmsByDateRange = (films, rangeType) => {
+  const dateTo = moment();
+  let dateFrom;
+  switch (rangeType) {
+    case RangeType.ALL_TIME:
+      return films;
+    case RangeType.TODAY:
+      dateFrom = moment().subtract(1, `days`);
+      break;
+    case RangeType.WEEK:
+      dateFrom = moment().subtract(7, `days`);
+      break;
+    case RangeType.MONTH:
+      dateFrom = moment().subtract(1, `months`);
+      break;
+    case RangeType.YEAR:
+      dateFrom = moment().subtract(1, `years`);
+      break;
+  }
+  return films.filter((film) => {
+    const watchingDate = film.userDetails.watchingDate;
+    return watchingDate >= dateFrom && watchingDate <= dateTo;
+  });
+};
+
+const getTotalDuration = (films) => {
+  let totalDuration = 0;
+  films.forEach((film) => {
+    totalDuration += film.filmInfo.runtime;
+  });
+
+  return [Math.floor(totalDuration / 60), totalDuration % 60];
+};
+
+const getGenres = (films) => {
+  const result = [];
+  films.forEach((film) => {
+    const genres = film.filmInfo.genre;
+    genres.forEach((it) => {
+      const genreObject = result.find((item) => item.genre === it);
+      if (genreObject) {
+        genreObject.count++;
+      } else {
+        result.push({genre: it, count: 1});
+      }
+    });
+  });
+
+  result.sort((a, b) => b.count - a.count);
+  return result;
+};
+
+const createStatisticTemplate = (films, rangeType) => {
+  const alreadyWatchedFilms = getAlreadyWatchedFilms(films);
+  const watchedInRangeFilms = getFilmsByDateRange(alreadyWatchedFilms, rangeType);
+  const alreadyWatchedFilmsCount = watchedInRangeFilms.length;
+  const [durationHours, durationMinutes] = getTotalDuration(watchedInRangeFilms);
+  const genres = getGenres(watchedInRangeFilms);
+  const topGenre = genres[0].genre;
+
   return (
     `<section class="statistic">
       <p class="statistic__rank">
@@ -31,15 +105,15 @@ const createStatisticTemplate = () => {
       <ul class="statistic__text-list">
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">You watched</h4>
-          <p class="statistic__item-text">22 <span class="statistic__item-description">movies</span></p>
+          <p class="statistic__item-text">${alreadyWatchedFilmsCount} <span class="statistic__item-description">movie${alreadyWatchedFilmsCount === 1 ? `:` : `s`}</span></p>
         </li>
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">Total duration</h4>
-          <p class="statistic__item-text">130 <span class="statistic__item-description">h</span> 22 <span class="statistic__item-description">m</span></p>
+          <p class="statistic__item-text">${durationHours} <span class="statistic__item-description">h</span> ${durationMinutes} <span class="statistic__item-description">m</span></p>
         </li>
         <li class="statistic__text-item">
           <h4 class="statistic__item-title">Top genre</h4>
-          <p class="statistic__item-text">Sci-Fi</p>
+          <p class="statistic__item-text">${topGenre}</p>
         </li>
       </ul>
 
@@ -52,13 +126,27 @@ const createStatisticTemplate = () => {
 };
 
 export default class Statistic extends AbstractSmartComponent {
+  constructor(films) {
+    super();
+    this._films = films;
+    this._rangeType = RangeType.ALL_TIME;
+  }
   recoveryListeners() {}
 
   getTemplate() {
-    return createStatisticTemplate();
+    return createStatisticTemplate(this._films, this._rangeType);
   }
 
-  rerender() {
+  _renderChart() {
+    //
+  }
+
+  rerender(films, rangeType) {
+    this._films = films;
+    this._rangeType = rangeType;
+
     super.rerender();
+
+    this._renderChart();
   }
 }

@@ -1,4 +1,3 @@
-import {msInMin} from "../consts";
 import AbstractSmartComponent from "./abstract-smart-component";
 import moment from "moment";
 
@@ -12,7 +11,7 @@ const createFilmDetailsTemplate = (film) => {
   const {date: releaseDate, releaseCountry} = release;
 
   const formattedReleaseDate = moment(releaseDate).format(`DD MMMM YYYY`);
-  const formattedRuntime = moment(runtime * msInMin).format(`H[h] m[m]`);
+  const formattedRuntime = Math.floor(runtime / 60) + `h ` + runtime % 60 + `m`;
 
   return (
     `<section class="film-details">
