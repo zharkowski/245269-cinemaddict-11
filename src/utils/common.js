@@ -1,4 +1,5 @@
 export const getRandomNumber = (end, start = 0) => Math.floor(start + Math.random() * (end + 1 - start));
+export const getRandomBoolean = () => Math.random() >= 0.5;
 export const getRandomElement = (arrayElements) => arrayElements[getRandomNumber(arrayElements.length - 1)];
 export const getFirstWord = (str) => str.indexOf(` `) === -1 ? str : str.substr(0, str.indexOf(` `));
 export const getRandomUniqueElements = (arrayElements, amount) => {

@@ -15,12 +15,16 @@
     }
   },
   "lint-staged": {
-    "src/**/*.js": ["npm run eslint"]
+    "src/**/*.js": [
+      "npm run eslint"
+    ]
   },
   "devDependencies": {
     "@webpack-cli/init": "0.3.0",
+    "assignment": "2.2.1",
     "eslint": "6.1.0",
     "eslint-config-htmlacademy": "0.5.2",
+    "he": "1.2.0",
     "husky": "4.2.5",
     "lint-staged": "10.2.2",
     "moment": "2.25.3",
