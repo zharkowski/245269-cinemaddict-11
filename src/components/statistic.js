@@ -1,6 +1,6 @@
 import AbstractSmartComponent from "./abstract-smart-component";
-// import Chart from "chart.js";
-// import ChartDataLabels from "chartjs-plugin-datalabels";
+import Chart from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
 import moment from "moment";
 
 const RangeType = {
@@ -67,6 +67,72 @@ const getGenres = (films) => {
   return result;
 };
 
+const renderChart = (ctx, films) => {
+  const BAR_HEIGHT = 50;
+  const genres = getGenres(films);
+
+  ctx.height = BAR_HEIGHT * genres.length;
+  const genresNames = genres.map((it) => it.genre);
+  const genresCount = genres.map((it) => it.count);
+
+  return new Chart(ctx, {
+    plugins: [ChartDataLabels],
+    type: `horizontalBar`,
+    data: {
+      labels: genresNames,
+      datasets: [{
+        data: genresCount,
+        backgroundColor: `#ffe800`,
+        hoverBackgroundColor: `#ffe800`,
+        anchor: `start`
+      }]
+    },
+    options: {
+      plugins: {
+        datalabels: {
+          font: {
+            size: 20
+          },
+          color: `#ffffff`,
+          anchor: `start`,
+          align: `start`,
+          offset: 40,
+        }
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontColor: `#ffffff`,
+            padding: 100,
+            fontSize: 20
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+          barThickness: 24
+        }],
+        xAxes: [{
+          ticks: {
+            display: false,
+            beginAtZero: true
+          },
+          gridLines: {
+            display: false,
+            drawBorder: false
+          },
+        }],
+      },
+      legend: {
+        display: false
+      },
+      tooltips: {
+        enabled: false
+      }
+    }
+  });
+};
+
 const createStatisticTemplate = (films, rangeType) => {
   const alreadyWatchedFilms = getAlreadyWatchedFilms(films);
   const watchedInRangeFilms = getFilmsByDateRange(alreadyWatchedFilms, rangeType);
@@ -130,6 +196,10 @@ export default class Statistic extends AbstractSmartComponent {
     super();
     this._films = films;
     this._rangeType = RangeType.ALL_TIME;
+
+    this._chart = null;
+
+    this.setRangeChangeHandler();
   }
   recoveryListeners() {}
 
@@ -137,8 +207,19 @@ export default class Statistic extends AbstractSmartComponent {
     return createStatisticTemplate(this._films, this._rangeType);
   }
 
+  _resetChart() {
+    if (this._chart) {
+      this._chart.destroy();
+      this._chart = null;
+    }
+  }
+
   _renderChart() {
-    //
+    const ctx = this.getElement().querySelector(`.statistic__chart`);
+    this._resetChart();
+    const alreadyWatchedFilms = getAlreadyWatchedFilms(this._films);
+    const watchedInRangeFilms = getFilmsByDateRange(alreadyWatchedFilms, this._rangeType);
+    this._chart = renderChart(ctx, watchedInRangeFilms);
   }
 
   rerender(films, rangeType) {
@@ -148,5 +229,18 @@ export default class Statistic extends AbstractSmartComponent {
     super.rerender();
 
     this._renderChart();
+  }
+
+  show() {
+    super.show();
+    this.rerender(this._films, this._rangeType);
+  }
+
+  setRangeChangeHandler() {
+    const formElement = this.getElement().querySelector(`.statistic__filters`);
+    formElement.addEventListener(`change`, () => {
+      const rangeType = formElement.elements[`statistic-filter`].value;
+      this.rerender(this._films, rangeType);
+    });
   }
 }

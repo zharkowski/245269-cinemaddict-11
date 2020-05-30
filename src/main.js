@@ -35,11 +35,10 @@ filterController.render();
 
 const pageController = new PageController(mainElement, filmsModel);
 pageController.render();
-pageController.hide();
 
 const statisticComponent = new Statistic(films);
 render(mainElement, statisticComponent, RenderPosition.BEFOREEND);
-// statisticComponent.hide();
+statisticComponent.hide();
 
 navigationComponent.setChangeHandler((menuItem) => {
   switch (menuItem) {
