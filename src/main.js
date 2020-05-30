@@ -12,6 +12,7 @@ import Films from "./models/films";
 import generateFilms from './mocks/film';
 // utils
 import {render, RenderPosition} from "./utils/render";
+import {getAlreadyWatchedFilmsCount} from "./utils/common";
 // consts
 import {MenuItem} from "./consts";
 
@@ -21,13 +22,13 @@ const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
 const headerFooter = document.querySelector(`.footer`);
 
-const navigationComponent = new Navigation();
-render(headerElement, new Profile(), RenderPosition.BEFOREEND);
-render(mainElement, navigationComponent, RenderPosition.BEFOREEND);
-
 const films = generateFilms(FILMS_COUNT);
 const filmsModel = new Films();
 filmsModel.allFilms = films;
+
+const navigationComponent = new Navigation();
+render(headerElement, new Profile(getAlreadyWatchedFilmsCount(films)), RenderPosition.BEFOREEND);
+render(mainElement, navigationComponent, RenderPosition.BEFOREEND);
 
 const filtersContainer = navigationComponent.getElement();
 const filterController = new FilterController(filtersContainer, filmsModel);

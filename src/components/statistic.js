@@ -2,6 +2,7 @@ import AbstractSmartComponent from "./abstract-smart-component";
 import Chart from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 import moment from "moment";
+import {getRating} from "../utils/common";
 
 const RangeType = {
   ALL_TIME: `all-time`,
@@ -140,13 +141,14 @@ const createStatisticTemplate = (films, rangeType) => {
   const [durationHours, durationMinutes] = alreadyWatchedFilmsCount === 0 ? [0, 0] : getTotalDuration(watchedInRangeFilms);
   const genres = getGenres(watchedInRangeFilms);
   const topGenre = alreadyWatchedFilmsCount === 0 ? `` : genres[0].genre;
+  const rank = getRating(alreadyWatchedFilmsCount);
 
   return (
     `<section class="statistic">
       <p class="statistic__rank">
         Your rank
         <img class="statistic__img" src="images/bitmap@2x.png" alt="Avatar" width="35" height="35">
-        <span class="statistic__rank-label">Sci-Fighter</span>
+        <span class="statistic__rank-label">${rank}</span>
       </p>
 
       <form action="https://echo.htmlacademy.ru/" method="get" class="statistic__filters">

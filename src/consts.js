@@ -128,3 +128,8 @@ export const MenuItem = {
   FAVORITES: `favorites`,
   STATISTIC: `stats`,
 };
+export const Rating = {
+  NOVICE: `Novice`,
+  FAN: `Fan`,
+  MOVIE_BUFF: `Movie Buff`,
+};
