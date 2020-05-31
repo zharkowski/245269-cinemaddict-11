@@ -37,7 +37,7 @@ filterController.render();
 const pageController = new PageController(mainElement, filmsModel);
 pageController.render();
 
-const statisticComponent = new Statistic(films);
+const statisticComponent = new Statistic(filmsModel);
 render(mainElement, statisticComponent, RenderPosition.BEFOREEND);
 statisticComponent.hide();
 

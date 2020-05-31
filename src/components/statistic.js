@@ -194,9 +194,9 @@ const createStatisticTemplate = (films, rangeType) => {
 };
 
 export default class Statistic extends AbstractSmartComponent {
-  constructor(films) {
+  constructor(filmsModel) {
     super();
-    this._films = films;
+    this._filmsModel = filmsModel;
     this._rangeType = RangeType.ALL_TIME;
 
     this._chart = null;
@@ -209,7 +209,7 @@ export default class Statistic extends AbstractSmartComponent {
   }
 
   getTemplate() {
-    return createStatisticTemplate(this._films, this._rangeType);
+    return createStatisticTemplate(this._filmsModel.films, this._rangeType);
   }
 
   _resetChart() {
@@ -222,13 +222,12 @@ export default class Statistic extends AbstractSmartComponent {
   _renderChart() {
     const ctx = this.getElement().querySelector(`.statistic__chart`);
     this._resetChart();
-    const alreadyWatchedFilms = getAlreadyWatchedFilms(this._films);
+    const alreadyWatchedFilms = getAlreadyWatchedFilms(this._filmsModel.films);
     const watchedInRangeFilms = getFilmsByDateRange(alreadyWatchedFilms, this._rangeType);
     this._chart = renderChart(ctx, watchedInRangeFilms);
   }
 
-  rerender(films, rangeType) {
-    this._films = films;
+  rerender(rangeType) {
     this._rangeType = rangeType;
     super.rerender();
 
@@ -237,14 +236,14 @@ export default class Statistic extends AbstractSmartComponent {
 
   show() {
     super.show();
-    this.rerender(this._films, this._rangeType);
+    this.rerender(this._rangeType);
   }
 
   setRangeChangeHandler() {
     const inputElements = this.getElement().querySelectorAll(`.statistic__filters-input`);
     inputElements.forEach((input) => input.addEventListener(`click`, (evt) => {
       const rangeType = evt.target.value;
-      this.rerender(this._films, rangeType);
+      this.rerender(rangeType);
     }));
   }
 }
