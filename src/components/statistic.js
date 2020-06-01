@@ -1,7 +1,6 @@
 import AbstractSmartComponent from "./abstract-smart-component";
 import Chart from "chart.js";
 import ChartDataLabels from "chartjs-plugin-datalabels";
-import moment from "moment";
 import {getRating} from "../utils/common";
 
 const RangeType = {
@@ -17,22 +16,26 @@ const getAlreadyWatchedFilms = (films) => {
 };
 
 const getFilmsByDateRange = (films, rangeType) => {
-  const dateTo = moment();
+  const dateTo = new Date();
   let dateFrom;
   switch (rangeType) {
     case RangeType.ALL_TIME:
       return films;
     case RangeType.TODAY:
-      dateFrom = moment().subtract(1, `days`);
+      dateFrom = new Date();
+      dateFrom.setDate(dateFrom.getDate() - 1);
       break;
     case RangeType.WEEK:
-      dateFrom = moment().subtract(7, `days`);
+      dateFrom = new Date();
+      dateFrom.setDate(dateFrom.getDate() - 7);
       break;
     case RangeType.MONTH:
-      dateFrom = moment().subtract(1, `months`);
+      dateFrom = new Date();
+      dateFrom.setMonth(dateFrom.getMonth() - 1);
       break;
     case RangeType.YEAR:
-      dateFrom = moment().subtract(1, `years`);
+      dateFrom = new Date();
+      dateFrom.setFullYear(dateFrom.getFullYear() - 1);
       break;
   }
   return films.filter((film) => {
