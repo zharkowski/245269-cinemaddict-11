@@ -1,6 +1,5 @@
 import AbstractComponent from "./abstract-component";
 import moment from "moment";
-import {msInMin} from "../consts";
 
 const createFilmCardTemplate = (film) => {
   const {filmInfo} = film;
@@ -8,7 +7,7 @@ const createFilmCardTemplate = (film) => {
   const {date: releaseDate} = release;
   const releaseYear = moment(releaseDate).format(`YYYY`);
   const shortDescription = description.length > 140 ? description.slice(0, 139) + `…` : description;
-  const formattedRuntime = moment(runtime * msInMin).format(`H[h] m[m]`);
+  const formattedRuntime = Math.floor(runtime / 60) + `h ` + runtime % 60 + `m`;
   return (
     `<article class="film-card">
       <h3 class="film-card__title">${title}</h3>

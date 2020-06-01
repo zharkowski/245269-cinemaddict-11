@@ -2,6 +2,10 @@
 import FilmComponent from "../components/film";
 import FilmDetailsPopup from "../components/film-details-popup";
 import FilmDetailsCommentsCount from "../components/film-details-comments-count";
+import FilmDetailsControls from "../components/film-details-controls";
+import FilmCommentsCount from "../components/film-comments-count";
+import FilmControls from "../components/film-controls";
+import NewComment from "../components/new-comment";
 // controllers
 import CommentsController from "./comments";
 // consts
@@ -9,10 +13,6 @@ import {KEY} from "../consts";
 // utils
 import {remove, render, RenderPosition, replace} from "../utils/render";
 import assignment from "assignment";
-import FilmDetailsControls from "../components/film-details-controls";
-import FilmCommentsCount from "../components/film-comments-count";
-import FilmControls from "../components/film-controls";
-import NewComment from "../components/new-comment";
 
 export const Mode = {
   DEFAULT: `default`,
@@ -80,12 +80,9 @@ export default class FilmController {
   _getMarkAsWatchedClickHandler(film) {
     return (evt) => {
       evt.preventDefault();
-      const newFilm = assignment({}, film, {
-        userDetails: {
-          alreadyWatched: !film.userDetails.alreadyWatched,
-          watchingDate: new Date(),
-        }
-      });
+      const newData = assignment({}, {alreadyWatched: !film.userDetails.alreadyWatched}, {watchingDate: new Date()});
+      const newDetails = Object.assign({}, film.userDetails, newData);
+      const newFilm = Object.assign({}, film, {userDetails: newDetails});
       this._dataChangeHandler(this, film, newFilm);
     };
   }

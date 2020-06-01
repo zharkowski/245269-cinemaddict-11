@@ -196,4 +196,18 @@ export default class PageController {
     this._renderTopRatedBoard(boardsContainerComponent.getElement(), films);
     this._renderMostCommentedBoard(boardsContainerComponent.getElement(), films);
   }
+
+  hide() {
+    if (this._sortComponent && this._boardsContainer) {
+      this._sortComponent.hide();
+      this._boardsContainer.hide();
+    }
+  }
+
+  show() {
+    if (this._sortComponent && this._boardsContainer) {
+      this._sortComponent.show();
+      this._boardsContainer.show();
+    }
+  }
 }
