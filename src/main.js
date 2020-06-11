@@ -1,3 +1,4 @@
+// import API from "./api";
 // components
 import Profile from "./components/profile";
 import Navigation from "./components/navigation";
@@ -17,8 +18,11 @@ import {getAlreadyWatchedFilmsCount} from "./utils/common";
 import {MenuItem} from "./consts";
 
 const FILMS_COUNT = 17;
+// const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict/`;
+// const AUTHORIZATION = `Basic eo0w12344ik29889a`;
 
 const films = generateFilms(FILMS_COUNT);
+// const api = new API(END_POINT, AUTHORIZATION);
 const filmsModel = new Films();
 filmsModel.allFilms = films;
 
@@ -29,16 +33,16 @@ const navigationComponent = new Navigation();
 const filtersContainer = navigationComponent.getElement();
 const filterController = new FilterController(filtersContainer, filmsModel);
 const pageController = new PageController(mainElement, filmsModel);
-const statisticComponent = new Statistic(filmsModel);
+const statisticComponent = new Statistic({films: filmsModel});
 const footerStatistic = headerFooter.querySelector(`.footer__statistics`);
 
-render(headerElement, new Profile(getAlreadyWatchedFilmsCount(films)), RenderPosition.BEFOREEND);
+render(headerElement, new Profile(getAlreadyWatchedFilmsCount(filmsModel.films)), RenderPosition.BEFOREEND);
 render(mainElement, navigationComponent, RenderPosition.BEFOREEND);
 filterController.render();
 pageController.render();
 render(mainElement, statisticComponent, RenderPosition.BEFOREEND);
 statisticComponent.hide();
-render(footerStatistic, new FilmAmount(films.length), RenderPosition.BEFOREEND);
+render(footerStatistic, new FilmAmount(filmsModel.films.length), RenderPosition.BEFOREEND);
 
 navigationComponent.setChangeHandler((menuItem) => {
   switch (menuItem) {

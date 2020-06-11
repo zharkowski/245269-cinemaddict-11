@@ -197,9 +197,9 @@ const createStatisticTemplate = (films, rangeType) => {
 };
 
 export default class Statistic extends AbstractSmartComponent {
-  constructor(filmsModel) {
+  constructor({films}) {
     super();
-    this._filmsModel = filmsModel;
+    this._filmsModel = films;
     this._rangeType = RangeType.ALL_TIME;
 
     this._chart = null;

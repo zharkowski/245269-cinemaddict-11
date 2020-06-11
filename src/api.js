@@ -20,11 +20,18 @@ export default class API {
   }
 
   _load({url, method = Method.GET, body = null, headers = new Headers()}) {
-    headers.append(`Authorization`, `Basic eo0w12344ik29889a`);
+    headers.append(`Authorization`, this._authorization);
     return fetch(`${this._endPoint}/${url}`, {method, body, headers})
       .then(chackStatus)
       .catch((err) => {
         throw err;
       });
+  }
+
+  getFilms() {
+    return this._load({
+      url: `movies`
+    })
+      .then((response) => response.json());
   }
 }
