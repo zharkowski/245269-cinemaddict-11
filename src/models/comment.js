@@ -7,11 +7,11 @@ export default class Comment {
     this.emotion = data[`emotion`] ? data[`emotion`] : null;
   }
 
-  static parseFilm(data) {
+  static parseComment(data) {
     return new Comment(data);
   }
 
-  static parseFilms(data) {
+  static parseComments(data) {
     return data.map(Comment.parseFilm);
   }
 
