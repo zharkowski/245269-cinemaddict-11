@@ -2,7 +2,7 @@ import {getFilmsByFilter} from "../utils/filter";
 
 export default class Films {
   constructor() {
-    this._films = null;
+    this._films = [];
     this._activeFilterType = null;
 
     this._filterChangeHandlers = [];

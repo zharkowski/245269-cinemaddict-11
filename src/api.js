@@ -1,3 +1,5 @@
+import Film from "./models/film";
+
 const Method = {
   GET: `GET`,
   POST: `POST`,
@@ -32,6 +34,8 @@ export default class API {
     return this._load({
       url: `movies`
     })
-      .then((response) => response.json());
+      .then((response) => response.json())
+      .then(Film.parseFilms)
+      .catch(() => []);
   }
 }

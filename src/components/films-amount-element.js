@@ -1,4 +1,4 @@
-import AbstractComponent from "./abstract-component";
+import AbstractSmartComponent from "./abstract-smart-component";
 
 const createFilmsAmountTemplate = (amount) => {
   return (
@@ -6,13 +6,15 @@ const createFilmsAmountTemplate = (amount) => {
   );
 };
 
-export default class FilmAmount extends AbstractComponent {
-  constructor(amount) {
+export default class FilmAmount extends AbstractSmartComponent {
+  constructor(filmsModel) {
     super();
-    this._amount = amount;
+    this._filmsModel = filmsModel;
   }
 
   getTemplate() {
-    return createFilmsAmountTemplate(this._amount);
+    return createFilmsAmountTemplate(this._filmsModel.films.length);
   }
+
+  recoveryListeners() {}
 }

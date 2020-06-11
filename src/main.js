@@ -9,23 +9,16 @@ import FilterController from "./controllers/filter";
 import PageController from "./controllers/page";
 // models
 import Films from "./models/films";
-// import Film from "./models/film";
-// mocks
-import generateFilms from './mocks/film';
 // utils
 import {render, RenderPosition} from "./utils/render";
-import {getAlreadyWatchedFilmsCount} from "./utils/common";
 // consts
 import {MenuItem} from "./consts";
 
-const FILMS_COUNT = 17;
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict/`;
 const AUTHORIZATION = `Basic eo0w12344ik29889a`;
 
-const films = generateFilms(FILMS_COUNT);
 const api = new API(END_POINT, AUTHORIZATION);
 const filmsModel = new Films();
-filmsModel.allFilms = films;
 
 const headerElement = document.querySelector(`.header`);
 const mainElement = document.querySelector(`.main`);
@@ -36,14 +29,16 @@ const filterController = new FilterController(filtersContainer, filmsModel);
 const pageController = new PageController(mainElement, filmsModel);
 const statisticComponent = new Statistic({films: filmsModel});
 const footerStatistic = headerFooter.querySelector(`.footer__statistics`);
+const profileComponent = new Profile(filmsModel);
+const filmAmountComponent = new FilmAmount(filmsModel);
 
-render(headerElement, new Profile(getAlreadyWatchedFilmsCount(filmsModel.films)), RenderPosition.BEFOREEND);
+render(headerElement, profileComponent, RenderPosition.BEFOREEND);
 render(mainElement, navigationComponent, RenderPosition.BEFOREEND);
 filterController.render();
-pageController.render();
+
 render(mainElement, statisticComponent, RenderPosition.BEFOREEND);
 statisticComponent.hide();
-render(footerStatistic, new FilmAmount(filmsModel.films.length), RenderPosition.BEFOREEND);
+render(footerStatistic, filmAmountComponent, RenderPosition.BEFOREEND);
 
 navigationComponent.setChangeHandler((menuItem) => {
   switch (menuItem) {
@@ -71,6 +66,9 @@ navigationComponent.setChangeHandler((menuItem) => {
 });
 
 api.getFilms()
-  .then(() => {
-    //
+  .then((films) => {
+    filmsModel.allFilms = films;
+    pageController.render();
+    profileComponent.rerender();
+    filmAmountComponent.rerender();
   });

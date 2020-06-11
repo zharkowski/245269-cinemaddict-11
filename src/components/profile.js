@@ -1,5 +1,5 @@
-import AbstractComponent from "./abstract-component";
-import {getRating} from "../utils/common";
+import {getAlreadyWatchedFilmsCount, getRating} from "../utils/common";
+import AbstractSmartComponent from "./abstract-smart-component";
 
 const createProfileTemplate = (filmsCount) => {
   const rating = getRating(filmsCount);
@@ -11,12 +11,15 @@ const createProfileTemplate = (filmsCount) => {
   );
 };
 
-export default class Profile extends AbstractComponent {
-  constructor(filmsCount) {
+export default class Profile extends AbstractSmartComponent {
+  constructor(filmsModel) {
     super();
-    this._filmsCount = filmsCount;
+    this._filmsModel = filmsModel;
   }
+
   getTemplate() {
-    return createProfileTemplate(this._filmsCount);
+    return createProfileTemplate(getAlreadyWatchedFilmsCount(this._filmsModel.films));
   }
+
+  recoveryListeners() {}
 }
