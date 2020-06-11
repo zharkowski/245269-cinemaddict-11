@@ -27,4 +27,45 @@ export default class Film {
     };
   }
 
+  static parseFilm(data) {
+    return new Film(data);
+  }
+
+  static parseFilms(data) {
+    return data.map(Film.parseFilm);
+  }
+
+  toRAW() {
+    return {
+      "id": this.id,
+      "comments": this.comments,
+      "film_info": {
+        "title": this.filmInfo.title,
+        "alternative_title": this.filmInfo.alternativeTitle,
+        "total_rating": this.filmInfo.totalRating,
+        "poster": this.filmInfo.poster,
+        "age_rating": this.filmInfo.ageRating,
+        "director": this.filmInfo.director,
+        "writers": this.filmInfo.writers,
+        "actors": this.filmInfo.actors,
+        "release": {
+          "date": this.filmInfo.release.date ? this.filmInfo.release.date.toISOString() : null,
+          "release_country": this.filmInfo.release.releaseCountry,
+        },
+        "runtime": this.filmInfo.runtime,
+        "genre": this.filmInfo.genre,
+        "description": this.filmInfo.description,
+      },
+      "user_details": {
+        "watchlist": this.userDetails.watchlist,
+        "already_watched": this.userDetails.alreadyWatched,
+        "watching_date": this.userDetails.watchingDate ? this.userDetails.watchingDate.toISOString() : null,
+        "favorite": this.userDetails.favorite,
+      }
+    };
+  }
+
+  static clone(data) {
+    return new Film(data.toRAW());
+  }
 }

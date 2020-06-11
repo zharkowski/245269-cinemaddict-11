@@ -1,4 +1,4 @@
-// import API from "./api";
+import API from "./api";
 // components
 import Profile from "./components/profile";
 import Navigation from "./components/navigation";
@@ -9,6 +9,7 @@ import FilterController from "./controllers/filter";
 import PageController from "./controllers/page";
 // models
 import Films from "./models/films";
+// import Film from "./models/film";
 // mocks
 import generateFilms from './mocks/film';
 // utils
@@ -18,11 +19,11 @@ import {getAlreadyWatchedFilmsCount} from "./utils/common";
 import {MenuItem} from "./consts";
 
 const FILMS_COUNT = 17;
-// const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict/`;
-// const AUTHORIZATION = `Basic eo0w12344ik29889a`;
+const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict/`;
+const AUTHORIZATION = `Basic eo0w12344ik29889a`;
 
 const films = generateFilms(FILMS_COUNT);
-// const api = new API(END_POINT, AUTHORIZATION);
+const api = new API(END_POINT, AUTHORIZATION);
 const filmsModel = new Films();
 filmsModel.allFilms = films;
 
@@ -68,3 +69,8 @@ navigationComponent.setChangeHandler((menuItem) => {
       break;
   }
 });
+
+api.getFilms()
+  .then(() => {
+    //
+  });
