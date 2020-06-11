@@ -18,8 +18,8 @@ import {remove, render, RenderPosition} from "./utils/render";
 import {MenuItem} from "./consts";
 import BoardsContainer from "./components/boards-container";
 
-const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict/`;
-const AUTHORIZATION = `Basic eo0w12344ik29889a`;
+const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
+const AUTHORIZATION = `Basic eo04ik2989a`;
 
 const api = new API(END_POINT, AUTHORIZATION);
 const filmsModel = new Films();
@@ -32,7 +32,7 @@ const filtersContainer = navigationComponent.getElement();
 const filterController = new FilterController(filtersContainer, filmsModel);
 const sortComponent = new SortComponent();
 const boardsContainerComponent = new BoardsContainer();
-const pageController = new PageController(boardsContainerComponent.getElement(), filmsModel, sortComponent);
+const pageController = new PageController(boardsContainerComponent.getElement(), filmsModel, sortComponent, api);
 const statisticComponent = new Statistic({films: filmsModel});
 const loadComponent = new Load();
 const footerStatistic = headerFooter.querySelector(`.footer__statistics`);
@@ -76,16 +76,14 @@ navigationComponent.setChangeHandler((menuItem) => {
 
 api.getFilms()
   .then((films) => {
-    setTimeout(() => {
-      filmsModel.allFilms = films;
-      remove(loadComponent);
-      if (films.length !== 0) {
-        pageController.render();
-        profileComponent.rerender();
-        filmAmountComponent.rerender();
-      } else {
-        const noDataComponent = new NoDataComponent();
-        render(boardsContainerComponent.getElement(), noDataComponent, RenderPosition.BEFOREEND);
-      }
-    }, 1000);
+    filmsModel.allFilms = films;
+    remove(loadComponent);
+    if (films.length !== 0) {
+      pageController.render();
+      profileComponent.rerender();
+      filmAmountComponent.rerender();
+    } else {
+      const noDataComponent = new NoDataComponent();
+      render(boardsContainerComponent.getElement(), noDataComponent, RenderPosition.BEFOREEND);
+    }
   });

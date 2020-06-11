@@ -1,6 +1,6 @@
 export default class Comments {
   constructor() {
-    this._comments = null;
+    this._comments = [];
 
     this._dataChangeHandlers = [];
   }
@@ -35,15 +35,6 @@ export default class Comments {
 
   removeComment(id) {
     this.updateComment(id, []);
-    // const index = this.comments.findIndex((comment) => comment.id === id);
-    // if (index === -1) {
-    //   return false;
-    // }
-    //
-    // this.comments = [].concat(this.comments.slice(0, index), this.comments.slice(index + 1));
-    // this._callHandlers(this._dataChangeHandlers);
-    //
-    // return true;
   }
 
   addComment(comment) {

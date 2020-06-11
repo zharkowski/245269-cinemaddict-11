@@ -12,7 +12,7 @@ export default class Comment {
   }
 
   static parseComments(data) {
-    return data.map(Comment.parseFilm);
+    return data.map(Comment.parseComment);
   }
 
   toRAW() {

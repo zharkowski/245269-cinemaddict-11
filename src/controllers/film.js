@@ -97,7 +97,7 @@ export default class FilmController {
 
   renderFilmCommentsCount() {
     const oldFilmCommentsCountComponent = this._filmCommentsCountComponent;
-    this._filmCommentsCountComponent = new FilmCommentsCount(this._commentsModel.comments.length);
+    this._filmCommentsCountComponent = new FilmCommentsCount(this._commentsModel);
     if (oldFilmCommentsCountComponent) {
       replace(this._filmCommentsCountComponent, oldFilmCommentsCountComponent);
     } else {

@@ -35,7 +35,9 @@ export default class API {
     return this._load({
       url: `movies`
     })
-      .then((response) => response.json())
+      .then((response) => {
+        return response.json();
+      })
       .then(Film.parseFilms)
       .catch(() => []);
   }
@@ -44,7 +46,9 @@ export default class API {
     return this._load({
       url: `comments/${filmId}`
     })
-      .then((response) => response.json())
+      .then((response) => {
+        return response.json();
+      })
       .then(Comment.parseComments)
       .catch(() => []);
   }

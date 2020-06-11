@@ -7,13 +7,13 @@ const createFilmCommentsCountTemplate = (commentsCount) => {
 };
 
 export default class FilmCommentsCount extends AbstractComponent {
-  constructor(commentsCount) {
+  constructor(commentsModel) {
     super();
-    this._commentsCount = commentsCount;
+    this._commentsModel = commentsModel;
   }
 
   getTemplate() {
-    return createFilmCommentsCountTemplate(this._commentsCount);
+    return createFilmCommentsCountTemplate(this._commentsModel.comments.length);
   }
 
   setClickHandler(handler) {
