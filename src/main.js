@@ -18,28 +18,27 @@ import {MenuItem} from "./consts";
 
 const FILMS_COUNT = 17;
 
-const headerElement = document.querySelector(`.header`);
-const mainElement = document.querySelector(`.main`);
-const headerFooter = document.querySelector(`.footer`);
-
 const films = generateFilms(FILMS_COUNT);
 const filmsModel = new Films();
 filmsModel.allFilms = films;
 
+const headerElement = document.querySelector(`.header`);
+const mainElement = document.querySelector(`.main`);
+const headerFooter = document.querySelector(`.footer`);
 const navigationComponent = new Navigation();
-render(headerElement, new Profile(getAlreadyWatchedFilmsCount(films)), RenderPosition.BEFOREEND);
-render(mainElement, navigationComponent, RenderPosition.BEFOREEND);
-
 const filtersContainer = navigationComponent.getElement();
 const filterController = new FilterController(filtersContainer, filmsModel);
-filterController.render();
-
 const pageController = new PageController(mainElement, filmsModel);
-pageController.render();
-
 const statisticComponent = new Statistic(filmsModel);
+const footerStatistic = headerFooter.querySelector(`.footer__statistics`);
+
+render(headerElement, new Profile(getAlreadyWatchedFilmsCount(films)), RenderPosition.BEFOREEND);
+render(mainElement, navigationComponent, RenderPosition.BEFOREEND);
+filterController.render();
+pageController.render();
 render(mainElement, statisticComponent, RenderPosition.BEFOREEND);
 statisticComponent.hide();
+render(footerStatistic, new FilmAmount(films.length), RenderPosition.BEFOREEND);
 
 navigationComponent.setChangeHandler((menuItem) => {
   switch (menuItem) {
@@ -65,6 +64,3 @@ navigationComponent.setChangeHandler((menuItem) => {
       break;
   }
 });
-
-const footerStatistic = headerFooter.querySelector(`.footer__statistics`);
-render(footerStatistic, new FilmAmount(films.length), RenderPosition.BEFOREEND);
