@@ -4,7 +4,7 @@ import ShowMoreButton from "../components/show-more-button";
 import TopRatedBoard from "../components/top-rated-board";
 import MostCommentedBoard from "../components/most-commented-board";
 import NoData from "../components/no-data";
-import Sort, {SortType} from "../components/sort";
+import {SortType} from "../components/sort";
 import BoardsContainer from "../components/boards-container";
 // utils
 import {remove, render, RenderPosition} from "../utils/render";
@@ -49,15 +49,15 @@ const renderFilms = (filmsListElement, films, dataChangeHandler, viewChangeHandl
 };
 
 export default class PageController {
-  constructor(container, filmsModel) {
+  constructor(container, filmsModel, sortComponent) {
     this._container = container;
     this._filmsModel = filmsModel;
+    this._sortComponent = sortComponent;
 
     this._showingFilmsControllers = [];
     this._showingFilmsCount = FIRST_SHOW_FILMS_COUNT;
 
     this._topRatedBoardComponent = new TopRatedBoard();
-    this._sortComponent = new Sort();
     this._mostCommentBoardComponent = new MostCommentedBoard();
     this._noDataComponent = new NoData();
     this._showMoreButtonComponent = new ShowMoreButton();
@@ -178,23 +178,19 @@ export default class PageController {
 
   render() {
     const films = this._filmsModel.films;
-    const sortComponent = this._sortComponent;
-    const container = this._container;
-    render(container, sortComponent, RenderPosition.BEFOREEND);
 
-    const boardsContainerComponent = this._boardsContainer;
-    render(container, boardsContainerComponent, RenderPosition.BEFOREEND);
+    const boardsContainer = this._container;
 
     if (films.length === 0) {
-      render(boardsContainerComponent, this._noDataComponent, RenderPosition.BEFOREEND);
+      render(boardsContainer, this._noDataComponent, RenderPosition.BEFOREEND);
       return;
     }
 
-    this._renderFilmsBoard(boardsContainerComponent.getElement(), films);
+    this._renderFilmsBoard(boardsContainer, films);
     this._renderFilms(films.slice(0, this._showingFilmsCount));
 
-    this._renderTopRatedBoard(boardsContainerComponent.getElement(), films);
-    this._renderMostCommentedBoard(boardsContainerComponent.getElement(), films);
+    this._renderTopRatedBoard(boardsContainer, films);
+    this._renderMostCommentedBoard(boardsContainer, films);
   }
 
   hide() {
