@@ -70,10 +70,10 @@ export default class API {
       headers: new Headers({"Content-Type": `application/json`}),
     })
       .then((response) => response.json())
-      .then(Comment.parseComment);
+      .then((response) => Comment.parseComments(response.comments));
   }
 
-  removeComment(id) {
+  deleteComment(id) {
     return this._load({
       url: `comments/${id}`,
       method: Method.DELETE,

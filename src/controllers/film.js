@@ -8,6 +8,7 @@ import FilmControls from "../components/film-controls";
 import NewComment from "../components/new-comment";
 // models
 import FilmModel from "../models/film";
+import CommentModel from "../models/comment";
 // controllers
 import CommentsController from "./comments";
 // consts
@@ -21,11 +22,13 @@ export const Mode = {
 };
 
 export default class FilmController {
-  constructor(container, commentsModel, dataChangeHandler, viewChangeHandler) {
+  constructor(container, filmModel, commentsModel, dataChangeHandler, viewChangeHandler, api) {
     this._container = container;
+    this._filmModel = filmModel;
     this._commentsModel = commentsModel;
     this._dataChangeHandler = dataChangeHandler;
     this._viewChangeHandler = viewChangeHandler;
+    this._api = api;
     this._mode = Mode.DEFAULT;
 
     this._filmComponent = null;
@@ -61,10 +64,17 @@ export default class FilmController {
 
   _commentsChangeHandler(commentController, oldData, newData) {
     if (newData === null) {
-      this._commentsController.removeComment(oldData.id);
+      this._api.deleteComment(oldData.id)
+        .then(() => {
+          this._commentsController.removeComment(oldData.id);
+        });
     }
     if (oldData === null) {
-      this._commentsController.addComment(newData);
+      this._api.createComment(this._filmModel.id, newData)
+        .then((commentModels) => {
+          this._commentsModel.comments = commentModels;
+          this._commentsController.render(commentModels);
+        });
     }
     this._renderFilmDetailsCommentsCount();
     this.renderFilmCommentsCount();
@@ -148,7 +158,8 @@ export default class FilmController {
   }
 
   _sendCommentKeydownHandler() {
-    this._commentsChangeHandler(this._commentsController, null, this._newCommentComponent.getData());
+    const newComment = new CommentModel(this._newCommentComponent.getData());
+    this._commentsChangeHandler(this._commentsController, null, newComment);
   }
 
   renderNewComment() {

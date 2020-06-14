@@ -2,7 +2,6 @@
 import CommentComponent from "../components/comment";
 // utils
 import {RenderPosition, render, remove, replace} from "../utils/render";
-import assignment from "assignment";
 
 export default class CommentsController {
   constructor(container, commentsModel, commentDataChangeHandler) {
@@ -30,13 +29,6 @@ export default class CommentsController {
     } else {
       render(this._container, commentComponent, RenderPosition.BEFOREEND);
     }
-  }
-
-  addComment(localComment) {
-    const commentId = String(new Date() + Math.random());
-    const newComment = assignment({}, localComment, {id: commentId, author: `You`});
-    this._commentsModel.addComment(newComment);
-    this._renderComment(newComment);
   }
 
   removeComment(id) {

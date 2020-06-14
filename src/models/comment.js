@@ -19,7 +19,7 @@ export default class Comment {
     return {
       "comment": this.comment ? this.comment : ``,
       "date": this.date ? this.date.toISOString() : null,
-      "emotion": this.date ? this.date.toISOString() : null,
+      "emotion": this.emotion,
     };
   }
 

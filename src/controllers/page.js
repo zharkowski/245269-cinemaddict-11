@@ -40,7 +40,7 @@ const getSortedFilms = (films, sortType, from, to) => {
 const renderFilms = (api, filmsListElement, films, dataChangeHandler, viewChangeHandler) => {
   return films.map((film) => {
     const commentsModel = new CommentsModel();
-    const filmController = new FilmController(filmsListElement, commentsModel, dataChangeHandler, viewChangeHandler);
+    const filmController = new FilmController(filmsListElement, film, commentsModel, dataChangeHandler, viewChangeHandler, api);
     api.getComment(film.id)
       .then((comments) => {
         commentsModel.comments = comments;
