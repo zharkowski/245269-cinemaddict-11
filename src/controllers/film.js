@@ -6,13 +6,14 @@ import FilmDetailsControls from "../components/film-details-controls";
 import FilmCommentsCount from "../components/film-comments-count";
 import FilmControls from "../components/film-controls";
 import NewComment from "../components/new-comment";
+// models
+import FilmModel from "../models/film";
 // controllers
 import CommentsController from "./comments";
 // consts
 import {KEY} from "../consts";
 // utils
 import {remove, render, RenderPosition, replace} from "../utils/render";
-import assignment from "assignment";
 
 export const Mode = {
   DEFAULT: `default`,
@@ -72,7 +73,8 @@ export default class FilmController {
   _getAddToWatchlistClickHandler(film) {
     return (evt) => {
       evt.preventDefault();
-      const newFilm = assignment({}, film, {userDetails: {watchlist: !film.userDetails.watchlist}});
+      const newFilm = FilmModel.clone(film);
+      newFilm.userDetails.watchlist = !newFilm.userDetails.watchlist;
       this._dataChangeHandler(this, film, newFilm);
     };
   }
@@ -80,9 +82,9 @@ export default class FilmController {
   _getMarkAsWatchedClickHandler(film) {
     return (evt) => {
       evt.preventDefault();
-      const newData = assignment({}, {alreadyWatched: !film.userDetails.alreadyWatched}, {watchingDate: new Date()});
-      const newDetails = Object.assign({}, film.userDetails, newData);
-      const newFilm = Object.assign({}, film, {userDetails: newDetails});
+      const newFilm = FilmModel.clone(film);
+      newFilm.userDetails.alreadyWatched = !newFilm.userDetails.alreadyWatched;
+      newFilm.userDetails.watchingDate = new Date();
       this._dataChangeHandler(this, film, newFilm);
     };
   }
@@ -90,7 +92,8 @@ export default class FilmController {
   _getFavoriteClickHandler(film) {
     return (evt) => {
       evt.preventDefault();
-      const newFilm = assignment({}, film, {userDetails: {favorite: !film.userDetails.favorite}});
+      const newFilm = FilmModel.clone(film);
+      newFilm.userDetails.favorite = !newFilm.userDetails.favorite;
       this._dataChangeHandler(this, film, newFilm);
     };
   }

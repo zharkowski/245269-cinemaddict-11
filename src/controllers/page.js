@@ -82,13 +82,15 @@ export default class PageController {
   }
 
   _detailsDataChangeHandler(filmController, oldData, newData) {
-    const isSuccess = this._filmsModel.updateFilm(oldData.id, newData);
-
-    if (isSuccess) {
-      filmController.renderFilmControls(newData);
-      filmController.renderFilmDetailsControls(newData);
-      filmController.updateOpenPopupHandler(oldData, newData);
-    }
+    this._api.updateFilm(oldData.id, newData)
+      .then((FilmModel) => {
+        const isSuccess = this._filmsModel.updateFilm(oldData.id, FilmModel);
+        if (isSuccess) {
+          filmController.renderFilmControls(FilmModel);
+          filmController.renderFilmDetailsControls(FilmModel);
+          filmController.updateOpenPopupHandler(oldData, FilmModel);
+        }
+      });
   }
 
   _showMoreButtonClickHandler() {

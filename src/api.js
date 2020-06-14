@@ -42,7 +42,7 @@ export default class API {
 
   updateFilm(id, data) {
     return this._load({
-      url: `movie/${id}`,
+      url: `movies/${id}`,
       method: Method.PUT,
       body: JSON.stringify(data.toRAW()),
       headers: new Headers({"Content-Type": `application/json`}),
