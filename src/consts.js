@@ -133,3 +133,4 @@ export const Rating = {
   FAN: `Fan`,
   MOVIE_BUFF: `Movie Buff`,
 };
+export const SHAKE_ANIMATION_TIMEOUT = 600;

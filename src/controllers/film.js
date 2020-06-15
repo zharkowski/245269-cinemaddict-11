@@ -12,11 +12,9 @@ import CommentModel from "../models/comment";
 // controllers
 import CommentsController from "./comments";
 // consts
-import {KEY} from "../consts";
+import {KEY, SHAKE_ANIMATION_TIMEOUT} from "../consts";
 // utils
 import {remove, render, RenderPosition, replace} from "../utils/render";
-
-const SHAKE_ANIMATION_TIMEOUT = 600;
 
 export const Mode = {
   DEFAULT: `default`,
@@ -69,6 +67,10 @@ export default class FilmController {
       this._api.deleteComment(oldData.id)
         .then(() => {
           this._commentsController.removeComment(oldData.id);
+        })
+        .catch(() => {
+          commentController.enableDeleteButton(oldData.id);
+          this._commentsController.shakeComment(oldData.id);
         });
     }
     if (oldData === null) {

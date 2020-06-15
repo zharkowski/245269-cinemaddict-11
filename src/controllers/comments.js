@@ -2,6 +2,8 @@
 import CommentComponent from "../components/comment";
 // utils
 import {RenderPosition, render, remove, replace} from "../utils/render";
+// costs
+import {SHAKE_ANIMATION_TIMEOUT} from "../consts";
 
 export default class CommentsController {
   constructor(container, commentsModel, commentDataChangeHandler) {
@@ -20,6 +22,8 @@ export default class CommentsController {
 
     const deleteClickHandler = (evt) => {
       evt.preventDefault();
+      commentComponent.disableDeleteButton();
+      commentComponent.setData({deleteButtonText: `Deleting...`});
       this._commentDataChangeHandler(this, comment, null);
     };
     commentComponent.setDeleteButtonClickHandler(deleteClickHandler);
@@ -35,6 +39,22 @@ export default class CommentsController {
     this._commentsModel.removeComment(id);
     const commentComponent = this._IdToCommentComponent[id];
     remove(commentComponent);
+  }
+
+  shakeComment(id) {
+    const commentComponent = this._IdToCommentComponent[id];
+    commentComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      commentComponent.getElement().style.animation = ``;
+      commentComponent.setData({
+        deleteButtonText: `Delete`
+      });
+    }, SHAKE_ANIMATION_TIMEOUT);
+  }
+
+  enableDeleteButton(id) {
+    this._IdToCommentComponent[id].enableDeleteButton();
   }
 
   destroy(comment) {
