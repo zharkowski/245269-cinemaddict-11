@@ -73,12 +73,11 @@ export default class NewComment extends AbstractSmartComponent {
       if (evt.key === KEY.ENTER && (evt.ctrlKey || evt.metaKey)
         && this._commentText && this._commentText.length >= 1 && this._activeEmoji !== null) {
         handler();
-        this._reset();
       }
     };
   }
 
-  _reset() {
+  reset() {
     this._activeEmoji = null;
     this._setCommentText(null);
     this.rerender();
@@ -92,6 +91,28 @@ export default class NewComment extends AbstractSmartComponent {
   removeSendCommentKeydownHandler(handler) {
     const keydownHandler = this._getKeydownHandler(handler);
     document.removeEventListener(`keydown`, keydownHandler);
+  }
+
+  disableForm() {
+    document.querySelectorAll(`.film-details__comment-input, .film-details__emoji-item`)
+      .forEach((item) => {
+        item.disabled = true;
+      });
+  }
+
+  enableForm() {
+    document.querySelectorAll(`.film-details__comment-input, .film-details__emoji-item`)
+      .forEach((item) => {
+        item.disabled = false;
+      });
+  }
+
+  addOutline() {
+    document.querySelector(`.film-details__comment-input`).style.outline = `2px solid red`;
+  }
+
+  removeOutline() {
+    document.querySelector(`.film-details__comment-input`).style.outline = `none`;
   }
 
   getData() {

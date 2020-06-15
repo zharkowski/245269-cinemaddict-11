@@ -16,6 +16,8 @@ import {KEY} from "../consts";
 // utils
 import {remove, render, RenderPosition, replace} from "../utils/render";
 
+const SHAKE_ANIMATION_TIMEOUT = 600;
+
 export const Mode = {
   DEFAULT: `default`,
   DETAILS: `details`,
@@ -70,10 +72,18 @@ export default class FilmController {
         });
     }
     if (oldData === null) {
+      this._newCommentComponent.removeOutline();
+      this._newCommentComponent.disableForm();
       this._api.createComment(this._filmModel.id, newData)
         .then((commentModels) => {
           this._commentsModel.comments = commentModels;
           this._commentsController.render(commentModels);
+          this._newCommentComponent.reset();
+        })
+        .catch(() => {
+          this._newCommentComponent.enableForm();
+          this.shakeNewComment();
+          this._newCommentComponent.addOutline();
         });
     }
     this._renderFilmDetailsCommentsCount();
@@ -160,6 +170,14 @@ export default class FilmController {
   _sendCommentKeydownHandler() {
     const newComment = new CommentModel(this._newCommentComponent.getData());
     this._commentsChangeHandler(this._commentsController, null, newComment);
+  }
+
+  shakeNewComment() {
+    this._newCommentComponent.getElement().style.animation = `shake ${SHAKE_ANIMATION_TIMEOUT / 1000}s`;
+
+    setTimeout(() => {
+      this._newCommentComponent.getElement().style.animation = ``;
+    }, SHAKE_ANIMATION_TIMEOUT);
   }
 
   renderNewComment() {
