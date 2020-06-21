@@ -1,4 +1,6 @@
 import API from "./api/api";
+import Store from "./api/store";
+import Provider from "./api/provider";
 // components
 import Profile from "./components/profile";
 import Navigation from "./components/navigation";
@@ -20,8 +22,13 @@ import BoardsContainer from "./components/boards-container";
 
 const END_POINT = `https://11.ecmascript.pages.academy/cinemaddict`;
 const AUTHORIZATION = `Basic eo04ik2989a`;
+const STORE_PREFIX = `cinemadict-localstorage`;
+const STORE_VER = `v1`;
+const STORE_NAME = `${STORE_PREFIX}-${STORE_VER}`;
 
 const api = new API(END_POINT, AUTHORIZATION);
+const store = new Store(STORE_NAME, window.localStorage);
+const apiWithProvider = new Provider(api, store);
 const filmsModel = new Films();
 
 const headerElement = document.querySelector(`.header`);
@@ -32,7 +39,7 @@ const filtersContainer = navigationComponent.getElement();
 const filterController = new FilterController(filtersContainer, filmsModel);
 const sortComponent = new SortComponent();
 const boardsContainerComponent = new BoardsContainer();
-const pageController = new PageController(boardsContainerComponent.getElement(), filmsModel, sortComponent, api);
+const pageController = new PageController(boardsContainerComponent.getElement(), filmsModel, sortComponent, apiWithProvider);
 const statisticComponent = new Statistic({films: filmsModel});
 const loadComponent = new Load();
 const footerStatistic = headerFooter.querySelector(`.footer__statistics`);
@@ -74,7 +81,7 @@ navigationComponent.setChangeHandler((menuItem) => {
   }
 });
 
-api.getFilms()
+apiWithProvider.getFilms()
   .then((films) => {
     filmsModel.allFilms = films;
     remove(loadComponent);

@@ -1,19 +1,19 @@
 import Film from "../models/film";
 import {nanoid} from "nanoid";
 
-const isOnline = () => {
-  return window.navigator.onLine;
-};
-
 export default class Provider {
   constructor(api, store) {
     this._api = api;
     this._store = store;
   }
 
+  _isOnline() {
+    return window.navigator.onLine;
+  }
+
 
   getFilms() {
-    if (isOnline()) {
+    if (this._isOnline()) {
       return this._api.getFilms()
         .then((films) => {
           const items = films.reduce((acc, current) => {
@@ -32,7 +32,7 @@ export default class Provider {
   }
 
   updateFilm(id, data) {
-    if (isOnline()) {
+    if (this._isOnline()) {
       return this._api.updateFilm(id, data)
         .then((newFilms) => {
           this._store.setItem(newFilms.id, newFilms.toRAW());
@@ -49,7 +49,7 @@ export default class Provider {
   }
 
   getComments(filmId) {
-    if (isOnline()) {
+    if (this._isOnline()) {
       return this._api.getComments(filmId)
         .then((comments) => {
           const items = comments.reduce((acc, current) => {
@@ -62,17 +62,19 @@ export default class Provider {
           return comments;
         });
     }
-    // TODO: сделать для оффлайна
-    return Promise.resolve();
+
+    const storeComments = Object.values(this._store.getItems());
+    return Promise.resolve(Film.parseFilms(storeComments));
   }
 
   createComment(filmId, data) {
-    if (isOnline()) {
+    if (this._isOnline()) {
       return this._api.createComment(filmId, data)
-        .then((newComment) => {
+        .then((comments) => {
+          const newComment = comments[comments.length - 1];
           this._store.setItem(newComment.id, newComment.toRAW());
 
-          return newComment;
+          return comments;
         });
     }
 
@@ -85,7 +87,7 @@ export default class Provider {
   }
 
   deleteComment(id) {
-    if (isOnline()) {
+    if (this._isOnline()) {
       return this._api.deleteComment(id)
         .then(() => this._store.removeItem(id));
     }
