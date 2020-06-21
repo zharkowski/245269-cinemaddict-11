@@ -1,4 +1,4 @@
-import API from "./api";
+import API from "./api/api";
 // components
 import Profile from "./components/profile";
 import Navigation from "./components/navigation";
@@ -89,7 +89,7 @@ api.getFilms()
   });
 
 window.addEventListener(`load`, () => {
-  navigator.serviceWorker.register(`/sw.js`)
+  navigator.serviceWorker.register(`/serviceWorker.js`)
     .then(() => {
       // Действие, в случае успешной регистрации ServiceWorker
     }).catch(() => {

@@ -41,7 +41,7 @@ const renderFilms = (api, filmsListElement, films, dataChangeHandler, viewChange
   return films.map((film) => {
     const commentsModel = new CommentsModel();
     const filmController = new FilmController(filmsListElement, film, commentsModel, dataChangeHandler, viewChangeHandler, api);
-    api.getComment(film.id)
+    api.getComments(film.id)
       .then((comments) => {
         commentsModel.comments = comments;
         filmController.render(film);

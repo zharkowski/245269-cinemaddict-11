@@ -22,13 +22,6 @@ self.addEventListener(`install`, (evt) => {
           `/images/icons/icon-watched-active.svg`,
           `/images/icons/icon-watchlist.svg`,
           `/images/icons/icon-watchlist-active.svg`,
-          `/images/posters/made-for-each-other.png`,
-          `/images/posters/popeye-meets-sinbad.png`,
-          `/images/posters/sagebrush-trail.jpg`,
-          `/images/posters/santa-claus-conquers-the-martians.jpg`,
-          `/images/posters/the-dance-of-life.jpg`,
-          `/images/posters/the-great-flamarion.jpg`,
-          `/images/posters/the-man-with-the-golden-arm.jpg`,
           `/images/background.png`,
           `/images/bitmap.png`,
           `/images/bitmap@2x.png`,
@@ -69,14 +62,14 @@ self.addEventListener(`fetch`, (evt) => {
 
         return fetch(request)
           .then((response) => {
-            if (!response || response.status !== 200 || response.type !== `basic`) {
-              return response;
-            }
-
-            const clonedResponse = response.clone();
-
-            caches.open(CACHE_NAME)
-              .then((cache) => cache.put(request, clonedResponse));
+            // if (!response || response.status !== 200 || response.type !== `basic`) {
+            //   return response;
+            // }
+            //
+            // const clonedResponse = response.clone();
+            //
+            // caches.open(CACHE_NAME)
+            //   .then((cache) => cache.put(request, clonedResponse));
 
             return response;
           });

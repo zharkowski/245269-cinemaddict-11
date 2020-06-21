@@ -1,5 +1,5 @@
-import Film from "./models/film";
-import Comment from "./models/comment";
+import Film from "../models/film";
+import Comment from "../models/comment";
 
 const Method = {
   GET: `GET`,
@@ -51,7 +51,7 @@ export default class API {
       .then(Film.parseFilm);
   }
 
-  getComment(filmId) {
+  getComments(filmId) {
     return this._load({
       url: `comments/${filmId}`
     })
