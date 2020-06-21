@@ -11,6 +11,18 @@ export default class Provider {
     return window.navigator.onLine;
   }
 
+  _getSyncedFilms(items) {
+    return items.filter(({success}) => success)
+      .map(({payload}) => payload.task);
+  }
+
+  _createStoreStructure(items) {
+    return items.reduce((acc, current) => {
+      return Object.assign({}, acc, {
+        [current.id]: current,
+      });
+    }, {});
+  }
 
   getFilms() {
     if (this._isOnline()) {
@@ -94,5 +106,25 @@ export default class Provider {
 
     this._store.removeItem(id);
     return Promise.resolve();
+  }
+
+  sync() {
+    if (this._isOnline()) {
+      const storeFilms = Object.values(this._store.getItems());
+
+      return this._api.sync(storeFilms)
+        .then((response) => {
+          // Забираем из ответа синхронизированные фильмы
+          const updatedFilms = this._getSyncedFilms(response.updated);
+
+          // Добавляем синхронизированные фильмы в хранилище.
+          // Хранилище должно быть актуальным в любой момент.
+          const items = this._createStoreStructure([...updatedFilms]);
+
+          this._store.setItems(items);
+        });
+    }
+
+    return Promise.reject(new Error(`Sync data failed`));
   }
 }
