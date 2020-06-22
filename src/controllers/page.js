@@ -9,7 +9,7 @@ import BoardsContainer from "../components/boards-container";
 // models
 import CommentsModel from "../models/comments";
 // utils
-import {remove, render, RenderPosition} from "../utils/render";
+import {remove, render, RenderPosition, replace} from "../utils/render";
 // controllers
 import FilmController from "./film";
 
@@ -37,10 +37,10 @@ const getSortedFilms = (films, sortType, from, to) => {
   return sortedFilms.slice(from, to);
 };
 
-const renderFilms = (api, filmsListElement, films, dataChangeHandler, viewChangeHandler) => {
+const renderFilms = (api, filmsListElement, films, dataChangeHandler, viewChangeHandler, commentsCountChangeHandler) => {
   return films.map((film) => {
     const commentsModel = new CommentsModel();
-    const filmController = new FilmController(filmsListElement, film, commentsModel, dataChangeHandler, viewChangeHandler, api);
+    const filmController = new FilmController(filmsListElement, film, commentsModel, dataChangeHandler, viewChangeHandler, commentsCountChangeHandler, api);
     api.getComments(film.id)
       .then((comments) => {
         commentsModel.comments = comments;
@@ -59,15 +59,16 @@ export default class PageController {
 
     this._showingFilmsControllers = [];
     this._showingFilmsCount = FIRST_SHOW_FILMS_COUNT;
+    this._mostCommentBoardComponent = null;
 
     this._topRatedBoardComponent = new TopRatedBoard();
-    this._mostCommentBoardComponent = new MostCommentedBoard();
     this._noDataComponent = new NoData();
     this._showMoreButtonComponent = new ShowMoreButton();
     this._filmsBoardComponent = new FilmsBoard();
     this._boardsContainer = new BoardsContainer();
 
     this._detailsDataChangeHandler = this._detailsDataChangeHandler.bind(this);
+    this._commentsCountChangeHandler = this._commentsCountChangeHandler.bind(this);
     this._viewChangeHandler = this._viewChangeHandler.bind(this);
     this._showMoreButtonClickHandler = this._showMoreButtonClickHandler.bind(this);
     this._sortTypeChangeHandler = this._sortTypeChangeHandler.bind(this);
@@ -91,6 +92,10 @@ export default class PageController {
           filmController.updateOpenPopupHandler(oldData, FilmModel);
         }
       });
+  }
+
+  _commentsCountChangeHandler() {
+    this._renderMostCommentedBoard(this._container);
   }
 
   _showMoreButtonClickHandler() {
@@ -124,20 +129,26 @@ export default class PageController {
     }
   }
 
-  _renderTopRatedBoard(boardsContainerElement, films) {
+  _renderTopRatedBoard(boardsContainerElement) {
     const topRatedBoardComponent = this._topRatedBoardComponent;
     render(boardsContainerElement, topRatedBoardComponent, RenderPosition.BEFOREEND);
     const filmsListContainerElement = topRatedBoardComponent.getElement().querySelector(`.films-list__container`);
-    const topRatedFilms = getSortedFilms(films, SortType.RATING, 0, TOP_RATED_FILMS_COUNT);
-    renderFilms(this._api, filmsListContainerElement, topRatedFilms, this._detailsDataChangeHandler, this._viewChangeHandler);
+    const topRatedFilms = getSortedFilms(this._filmsModel.films, SortType.RATING, 0, TOP_RATED_FILMS_COUNT);
+    renderFilms(this._api, filmsListContainerElement, topRatedFilms, this._detailsDataChangeHandler, this._viewChangeHandler, this._commentsCountChangeHandler);
   }
 
-  _renderMostCommentedBoard(boardsContainerElement, films) {
+  _renderMostCommentedBoard(boardsContainerElement) {
+    const oldComponent = this._mostCommentBoardComponent;
+    this._mostCommentBoardComponent = new MostCommentedBoard();
     const mostCommentedBoardComponent = this._mostCommentBoardComponent;
-    render(boardsContainerElement, mostCommentedBoardComponent, RenderPosition.BEFOREEND);
+    if (oldComponent) {
+      replace(mostCommentedBoardComponent, oldComponent);
+    } else {
+      render(boardsContainerElement, mostCommentedBoardComponent, RenderPosition.BEFOREEND);
+    }
     const filmsListContainerElement = mostCommentedBoardComponent.getElement().querySelector(`.films-list__container`);
-    const mostCommentedFilms = films.slice().sort((a, b) => b.comments.length - a.comments.length).slice(0, MOST_COMMENT_FILMS_COUNT);
-    renderFilms(this._api, filmsListContainerElement, mostCommentedFilms, this._detailsDataChangeHandler, this._viewChangeHandler);
+    const mostCommentedFilms = this._filmsModel.films.slice().sort((a, b) => b.comments.length - a.comments.length).slice(0, MOST_COMMENT_FILMS_COUNT);
+    renderFilms(this._api, filmsListContainerElement, mostCommentedFilms, this._detailsDataChangeHandler, this._viewChangeHandler, this._commentsCountChangeHandler);
   }
 
   _sortTypeChangeHandler(sortType) {
@@ -155,7 +166,7 @@ export default class PageController {
 
   _renderFilms(films) {
     const filmListElement = this._filmsBoardComponent.getElement().querySelector(`.films-list__container`);
-    const newFilms = renderFilms(this._api, filmListElement, films, this._detailsDataChangeHandler, this._viewChangeHandler);
+    const newFilms = renderFilms(this._api, filmListElement, films, this._detailsDataChangeHandler, this._viewChangeHandler, this._commentsCountChangeHandler);
     this._showingFilmsControllers = this._showingFilmsControllers.concat(newFilms);
     this._showingFilmsCount = this._showingFilmsControllers.length;
   }
@@ -194,8 +205,12 @@ export default class PageController {
     this._renderFilmsBoard(boardsContainer, films);
     this._renderFilms(films.slice(0, this._showingFilmsCount));
 
-    this._renderTopRatedBoard(boardsContainer, films);
-    this._renderMostCommentedBoard(boardsContainer, films);
+    if (this._filmsModel.films.some((film) => film.filmInfo.totalRating !== 0)) {
+      this._renderTopRatedBoard(boardsContainer, films);
+    }
+    if (this._filmsModel.films.some((film) => film.comments.length !== 0)) {
+      this._renderMostCommentedBoard(boardsContainer, films);
+    }
   }
 
   hide() {

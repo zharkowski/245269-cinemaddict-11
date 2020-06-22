@@ -22,12 +22,13 @@ export const Mode = {
 };
 
 export default class FilmController {
-  constructor(container, filmModel, commentsModel, dataChangeHandler, viewChangeHandler, api) {
+  constructor(container, filmModel, commentsModel, dataChangeHandler, viewChangeHandler, commentsCountChangeHandler, api) {
     this._container = container;
     this._filmModel = filmModel;
     this._commentsModel = commentsModel;
     this._dataChangeHandler = dataChangeHandler;
     this._viewChangeHandler = viewChangeHandler;
+    this._commentsCountChangeHandler = commentsCountChangeHandler;
     this._api = api;
     this._mode = Mode.DEFAULT;
 
@@ -67,6 +68,9 @@ export default class FilmController {
       this._api.deleteComment(oldData.id)
         .then(() => {
           this._commentsController.removeComment(oldData.id);
+          this._renderFilmDetailsCommentsCount();
+          this.renderFilmCommentsCount();
+          this._commentsCountChangeHandler();
         })
         .catch(() => {
           commentController.enableDeleteButton(oldData.id);
@@ -77,10 +81,13 @@ export default class FilmController {
       this._newCommentComponent.removeOutline();
       this._newCommentComponent.disableForm();
       this._api.createComment(this._filmModel.id, newData)
-        .then((commentModels) => {
-          this._commentsModel.comments = commentModels;
-          this._commentsController.render(commentModels);
+        .then((commentsModel) => {
+          this._commentsModel.comments = commentsModel;
+          this._commentsController.render(commentsModel);
           this._newCommentComponent.reset();
+          this._renderFilmDetailsCommentsCount();
+          this.renderFilmCommentsCount();
+          this._commentsCountChangeHandler();
         })
         .catch(() => {
           this._newCommentComponent.enableForm();
@@ -88,8 +95,6 @@ export default class FilmController {
           this._newCommentComponent.addOutline();
         });
     }
-    this._renderFilmDetailsCommentsCount();
-    this.renderFilmCommentsCount();
   }
 
   _getAddToWatchlistClickHandler(film) {
